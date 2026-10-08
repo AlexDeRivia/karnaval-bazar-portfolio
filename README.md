@@ -1,12 +1,12 @@
-# Karnaval Bazaar
+# Casa Lumbre
 
-Sistema web para consultar el catálogo de productos y gestionar clientes, empleados, proveedores, productos y compras de un bazar. Está desarrollado con Spring Boot, Thymeleaf, Spring Security y JPA.
+Sistema web de Casa Lumbre para consultar el catálogo de productos y gestionar clientes, empleados, proveedores, productos y compras. Está desarrollado con Spring Boot, Thymeleaf, Spring Security y JPA.
 
 ## Estado del proyecto
 
 El perfil `demo` carga 50 productos en una base H2 en memoria. El catálogo y el carrito funcionan con esos productos; para iniciar Stripe Checkout se deben configurar las credenciales de prueba. Los datos se restablecen al reiniciar la aplicación. El panel de gestión requiere una cuenta administrativa configurada por variables de entorno.
 
-El perfil `prod` usa PostgreSQL para conservar pedidos. Con `CHECKOUT_MODE=stripe-test`, el servidor crea una sesión de Stripe Checkout con precios calculados desde la base de datos, guarda el pedido pendiente y lo confirma solo mediante un webhook con firma válida. La página de confirmación permite descargar un PDF ficticio una vez confirmado. **No admite claves de modo activo ni emite facturas fiscales.**
+El perfil `prod` usa PostgreSQL para conservar pedidos. Con `CHECKOUT_MODE=stripe-test`, el servidor crea una sesión de Stripe Checkout con precios calculados desde la base de datos, guarda el pedido pendiente y lo confirma solo mediante un webhook con firma válida. La página de confirmación permite descargar una factura informativa en PDF una vez confirmado. **No admite claves de modo activo ni emite facturas fiscales.**
 
 ## Ejecución local
 
@@ -59,7 +59,7 @@ No guardes credenciales en Git. Configura las claves de servicios externos solo 
    | `4000 0000 0000 0002` | Pago rechazado; no hay confirmación ni PDF. |
    | `4000 0000 0000 3220` | Solicita autenticación 3D Secure antes de completar el pago. |
 
-La URL de retorno solo muestra el estado; no confirma el pedido por sí sola. Si el webhook aún no llegó, la página espera la confirmación. El PDF es un comprobante de muestra sin validez tributaria. Para un sitio público usa PostgreSQL persistente y registra en Stripe el webhook `https://TU_DOMINIO/stripe/webhook` con el evento `checkout.session.completed` (también se admiten eventos de pago asíncrono y expiración). El secreto del endpoint público es distinto del secreto generado por Stripe CLI.
+La URL de retorno solo muestra el estado; no confirma el pedido por sí sola. Si el webhook aún no llegó, la página espera la confirmación. El PDF es un comprobante informativo sin validez tributaria. Para un sitio público usa PostgreSQL persistente y registra en Stripe el webhook `https://TU_DOMINIO/stripe/webhook` con el evento `checkout.session.completed` (también se admiten eventos de pago asíncrono y expiración). El secreto del endpoint público es distinto del secreto generado por Stripe CLI.
 
 ## Despliegue
 

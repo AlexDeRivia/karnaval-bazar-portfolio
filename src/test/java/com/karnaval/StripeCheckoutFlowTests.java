@@ -61,7 +61,8 @@ class StripeCheckoutFlowTests {
         var product = products.findAll().get(0);
         mvc.perform(get("/shoopingCar/openCar"))
                 .andExpect(status().isOk())
-                .andExpect(content().string(org.hamcrest.Matchers.containsString("checkout-form")));
+                .andExpect(content().string(org.hamcrest.Matchers.containsString("checkout-form")))
+                .andExpect(content().string(org.hamcrest.Matchers.containsString("No se realizará ningún cargo real.")));
         mvc.perform(post("/checkout").param("item", product.getId() + ":2"))
                 .andExpect(status().isForbidden());
         mvc.perform(post("/checkout").with(csrf()).param("item", "999999:1"))
@@ -117,7 +118,7 @@ class StripeCheckoutFlowTests {
         }
         try (var document = Loader.loadPDF(pdf)) {
             String text = new PDFTextStripper().getText(document);
-            assertThat(text).contains("FACTURA DE MUESTRA", "SIN VALIDEZ TRIBUTARIA", product.getNombre());
+            assertThat(text).contains("CASA LUMBRE", "FACTURA INFORMATIVA", product.getNombre());
         }
     }
 

@@ -15,7 +15,7 @@ El archivo `render.yaml` prepara un servicio web Docker en Render con `SPRING_PR
 5. En el Dashboard de Stripe, registra `https://TU_DOMINIO/stripe/webhook` como endpoint de prueba. Selecciona `checkout.session.completed`; para posibles métodos de pago asíncronos, añade `checkout.session.async_payment_succeeded` y `checkout.session.async_payment_failed`. Copia el secreto `whsec_` de **ese endpoint** a `STRIPE_WEBHOOK_SECRET` en Render y despliega de nuevo. El botón de compra aparecerá cuando estén configuradas todas las variables.
 6. Abre el catálogo, agrega un producto y termina una compra con la tarjeta `4242 4242 4242 4242`, una fecha futura y cualquier CVC de tres dígitos. Comprueba el evento en Stripe, la confirmación del pedido y la descarga del PDF. Prueba también un pago rechazado y verifica que no se genere comprobante.
 
-Stripe Checkout aloja el formulario de tarjeta. El código solo acepta claves de prueba; el PDF generado es ficticio y no es una factura tributaria. Si Stripe no permite abrir una cuenta para tu país o entidad, el flujo de prueba puede requerir una cuenta elegible y el cobro real necesitará otro proveedor admitido. No actives claves de modo activo con este código.
+Stripe Checkout aloja el formulario de tarjeta. El código solo acepta claves de prueba; el PDF generado es informativo y no es una factura tributaria. Si Stripe no permite abrir una cuenta para tu país o entidad, el flujo de prueba puede requerir una cuenta elegible y el cobro real necesitará otro proveedor admitido. No actives claves de modo activo con este código.
 
 ## Costes y límites
 

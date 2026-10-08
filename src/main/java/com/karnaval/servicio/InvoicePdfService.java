@@ -34,8 +34,8 @@ public class InvoicePdfService {
                 canvas.addRect(0, 772, 595, 70);
                 canvas.fill();
                 canvas.setNonStrokingColor(Color.WHITE);
-                write(canvas, BOLD, 18, 48, 801, "FACTURA DE MUESTRA");
-                write(canvas, REGULAR, 9, 48, 785, "COMPROBANTE FICTICIO - SIN VALIDEZ TRIBUTARIA");
+                write(canvas, BOLD, 18, 48, 801, "CASA LUMBRE");
+                write(canvas, REGULAR, 9, 48, 785, "FACTURA INFORMATIVA - SIN VALIDEZ TRIBUTARIA");
 
                 canvas.setNonStrokingColor(new Color(31, 46, 44));
                 write(canvas, BOLD, 10, 48, 741, "Pedido");
@@ -64,8 +64,8 @@ public class InvoicePdfService {
                 canvas.lineTo(547, y - 3);
                 canvas.stroke();
                 write(canvas, BOLD, 13, 370, y - 29, "TOTAL  " + money(order.getTotalAmount()));
-                write(canvas, REGULAR, 9, 48, 88, "Pago confirmado por Stripe Checkout en modo de prueba.");
-                write(canvas, REGULAR, 9, 48, 73, "Documento informativo; no constituye factura fiscal ni acredita una venta real.");
+                write(canvas, REGULAR, 9, 48, 88, "Pago confirmado mediante Stripe Checkout.");
+                write(canvas, REGULAR, 9, 48, 73, "Este documento no tiene validez tributaria.");
             }
             document.save(output);
             return output.toByteArray();

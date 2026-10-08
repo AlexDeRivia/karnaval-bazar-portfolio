@@ -55,7 +55,7 @@ public class DemoDataInitializer implements CommandLineRunner {
                         item.path("titulo").asText(),
                         BigDecimal.valueOf(item.path("precio").asLong()),
                         20,
-                        "Artículo de demostración",
+                        "Disponible en tienda",
                         "Almacén principal",
                         item.path("imagen").asText().replaceFirst("^\\.", ""),
                         item.path("categoria").path("id").asText()));

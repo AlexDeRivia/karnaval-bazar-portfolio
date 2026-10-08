@@ -34,7 +34,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/", "/index", "/shoopingCar/openCar",
                                 "/message-responses/**", "/css/**", "/js/**", "/img/**",
-                                "/favicon.ico", "/api/catalog", "/checkout/**", "/stripe/webhook",
+                                "/favicon.ico", "/favicon.svg", "/favicon.png", "/api/catalog", "/checkout/**", "/stripe/webhook",
                                 "/admin/login", "/admin/denegado").permitAll()
                         .requestMatchers("/admin/**", "/cliente/**", "/empleado/**",
                                 "/producto/**", "/proveedor/**", "/compra/**").hasRole("ADMIN")

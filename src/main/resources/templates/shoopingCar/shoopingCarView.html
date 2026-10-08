@@ -43,12 +43,11 @@
                         </div>
                         <form id="checkout-form" th:if="${checkoutEnabled}" th:action="@{/checkout}" method="post">
                             <button id="carrito-acciones-comprar" class="carrito-acciones-comprar" type="submit">Continuar</button>
+                            <small class="checkout-disclaimer">No se realizará ningún cargo real.</small>
                         </form>
                         <p th:unless="${checkoutEnabled}">Checkout no disponible</p>
                     </div>
                 </div>
-                <p class="demo-notice">Entorno de prueba: no se realizan cargos reales.</p>
-
             </div>
         </main>
     </div>

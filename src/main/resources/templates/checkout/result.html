@@ -6,7 +6,7 @@
         <h1 id="order-title" th:text="${order.status.name() == 'PAID'} ? 'Compra confirmada' : 'Estamos confirmando tu pago'">Resultado de compra</h1>
         <p id="order-message" th:text="${order.status.name() == 'PAID'} ? 'Tu pedido fue confirmado. Puedes descargar tu comprobante.' : 'Recibimos tu regreso de Stripe. El pedido se confirmará cuando llegue la notificación de pago.'">Estado del pedido</p>
         <p>Pedido <strong th:text="${order.id}">ID</strong></p>
-        <a id="invoice-link" class="btn btn-primary" th:classappend="${order.status.name() == 'PAID'} ? '' : ' d-none'" th:href="@{/checkout/invoice/{id}(id=${order.id})}">Descargar factura de muestra</a>
+        <a id="invoice-link" class="btn btn-primary" th:classappend="${order.status.name() == 'PAID'} ? '' : ' d-none'" th:href="@{/checkout/invoice/{id}(id=${order.id})}">Descargar factura PDF</a>
         <a class="btn btn-outline-secondary" th:href="@{/}">Volver al catálogo</a>
     </main>
     <script th:src="@{/js/order-result.js}" type="module"></script>

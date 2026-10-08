@@ -15,6 +15,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.http.MediaType;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.karnaval.repositorio.CompraRepository;
@@ -35,7 +36,7 @@ class KarnavalBazaarApplicationTests {
     void publicCatalogAndCartRender() throws Exception {
         mvc.perform(get("/"))
                 .andExpect(status().isOk())
-                .andExpect(content().string(org.hamcrest.Matchers.containsString("Catálogo de prueba")));
+                .andExpect(content().string(org.hamcrest.Matchers.containsString("Casa Lumbre")));
         mvc.perform(get("/shoopingCar/openCar"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(org.hamcrest.Matchers.containsString("Checkout no disponible")));
@@ -43,6 +44,12 @@ class KarnavalBazaarApplicationTests {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(50)))
                 .andExpect(jsonPath("$[0].precio").isNumber());
+        mvc.perform(get("/favicon.svg"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.valueOf("image/svg+xml")));
+        mvc.perform(get("/favicon.png"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.IMAGE_PNG));
     }
 
     @Test
