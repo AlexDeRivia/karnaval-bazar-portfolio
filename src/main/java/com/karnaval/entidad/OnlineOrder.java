@@ -31,6 +31,9 @@ public class OnlineOrder {
     @Column(unique = true, length = 255)
     private String stripeSessionId;
 
+    // Nullable so orders created before stock reservation was introduced remain readable.
+    private Boolean stockReserved;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 16)
     private OnlineOrderStatus status;
@@ -58,12 +61,15 @@ public class OnlineOrder {
         this.lines = new ArrayList<>(lines);
         this.totalAmount = lines.stream().mapToLong(OnlineOrderLine::getSubtotal).reduce(0L, Math::addExact);
         this.status = OnlineOrderStatus.PENDING;
+        this.stockReserved = true;
         this.createdAt = Instant.now();
     }
 
     public String getId() { return id; }
     public String getStripeSessionId() { return stripeSessionId; }
     public void setStripeSessionId(String stripeSessionId) { this.stripeSessionId = stripeSessionId; }
+    public boolean isStockReserved() { return Boolean.TRUE.equals(stockReserved); }
+    public void setStockReserved(boolean stockReserved) { this.stockReserved = stockReserved; }
     public OnlineOrderStatus getStatus() { return status; }
     public void setStatus(OnlineOrderStatus status) { this.status = status; }
     public long getTotalAmount() { return totalAmount; }

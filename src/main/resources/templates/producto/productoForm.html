@@ -41,6 +41,8 @@
         <main>
                 <h2 class="my-4 text-center">Datos del Producto</h2>
                 <form th:object="${producto}" th:action="@{/producto/guardar}" th:method="post">
+                    <p class="alert alert-warning" role="alert" th:if="${saveError}" th:text="${saveError}"></p>
+                    <input type="hidden" name="expectedStock" th:if="${producto.id != null}" th:value="${expectedStock}">
                     <div class="mb-3">
                         <input type="hidden" id="inputID" th:field="*{id}" th:value="*{id}"/>
                     </div>
@@ -49,18 +51,21 @@
                         <label for="inputNombre" class="form-label">Nombre:</label>
                         <input type="text" id="inputNombre" class="form-control" placeholder="Ingrese Nombre"
                             th:field="*{nombre}" th:value="*{nombre}"/>
+                        <div class="text-danger" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></div>
                     </div>
                     
                     <div class="mb-3">
                         <label for="inputPrecio" class="form-label">Precio:</label>
                         <input type="number" step="0.01" id="inputPrecio" class="form-control" placeholder="Ingrese Precio"
                             th:field="*{precio}" th:value="*{precio}"/>
+                        <div class="text-danger" th:if="${#fields.hasErrors('precio')}" th:errors="*{precio}"></div>
                     </div>
                     
                     <div class="mb-3">
                         <label for="inputStock" class="form-label">Stock:</label>
                         <input type="number" id="inputStock" class="form-control" placeholder="Ingrese Stock"
                             th:field="*{stock}" th:value="*{stock}"/>
+                        <div class="text-danger" th:if="${#fields.hasErrors('stock')}" th:errors="*{stock}"></div>
                     </div>
 
                     <div class="mb-3">
@@ -72,24 +77,28 @@
                             <option value="vestimenta">Vestimenta</option>
                             <option value="aseo-limpieza">Aseo y limpieza</option>
                         </select>
+                        <div class="text-danger" th:if="${#fields.hasErrors('categoria')}" th:errors="*{categoria}"></div>
                     </div>
                     
                     <div class="mb-3">
                         <label for="inputDescripcion" class="form-label">Descripción:</label>
                         <textarea id="inputDescripcion" class="form-control" placeholder="Ingrese Descripción"
                             th:field="*{descripcion}" th:value="*{descripcion}"></textarea>
+                        <div class="text-danger" th:if="${#fields.hasErrors('descripcion')}" th:errors="*{descripcion}"></div>
                     </div>
                     
                     <div class="mb-3">
                         <label for="inputUbicacionAlmacen" class="form-label">Ubicación en Almacén:</label>
                         <input type="text" id="inputUbicacionAlmacen" class="form-control" placeholder="Ingrese Ubicación en Almacén"
                             th:field="*{ubicacionAlmacen}" th:value="*{ubicacionAlmacen}"/>
+                        <div class="text-danger" th:if="${#fields.hasErrors('ubicacionAlmacen')}" th:errors="*{ubicacionAlmacen}"></div>
                     </div>
                     
                     <div class="mb-3">
                         <label for="inputFoto" class="form-label">Foto URL:</label>
                         <input type="text" id="inputFoto" class="form-control" placeholder="Ingrese URL de la Foto"
                             th:field="*{foto}" th:value="*{foto}"/>
+                        <div class="text-danger" th:if="${#fields.hasErrors('foto')}" th:errors="*{foto}"></div>
                     </div>
                     
                     <div class="d-flex justify-content-between">

@@ -1,6 +1,7 @@
 package com.karnaval.servicio;
 
 import java.time.Instant;
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -13,17 +14,33 @@ import com.karnaval.entidad.OnlineOrder;
 import com.karnaval.entidad.OnlineOrderLine;
 import com.karnaval.entidad.OnlineOrderStatus;
 import com.karnaval.repositorio.OnlineOrderRepository;
+import com.karnaval.repositorio.ProductoRepository;
 
 @Service
 public class OnlineOrderService {
     private final OnlineOrderRepository orders;
+    private final ProductoRepository products;
 
-    public OnlineOrderService(OnlineOrderRepository orders) {
+    public OnlineOrderService(OnlineOrderRepository orders, ProductoRepository products) {
         this.orders = orders;
+        this.products = products;
     }
 
     @Transactional
     public OnlineOrder create(List<OnlineOrderLine> lines) {
+        if (lines == null || lines.isEmpty() || lines.stream().anyMatch(line -> line.getProductId() == null
+                || line.getQuantity() < 1 || line.getUnitAmount() < 1)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Carrito inválido");
+        }
+        // Conditional updates serialize competing checkouts at the database level.
+        for (OnlineOrderLine line : lines.stream()
+                .sorted(java.util.Comparator.comparing(OnlineOrderLine::getProductId)).toList()) {
+            if (products.reserve(line.getProductId(), line.getQuantity(),
+                    BigDecimal.valueOf(line.getUnitAmount(), 2)) != 1) {
+                throw new ResponseStatusException(HttpStatus.CONFLICT,
+                        "El precio o stock cambió. Actualiza tu carrito.");
+            }
+        }
         return orders.save(new OnlineOrder(lines));
     }
 
@@ -41,6 +58,16 @@ public class OnlineOrderService {
         OnlineOrder order = required(id);
         if (order.getStatus() == OnlineOrderStatus.PENDING && order.getStripeSessionId() == null) {
             order.setStatus(OnlineOrderStatus.FAILED);
+            releaseStock(order);
+        }
+    }
+
+    @Transactional
+    public void expireMissingSession(String id) {
+        OnlineOrder order = required(id);
+        if (order.getStatus() == OnlineOrderStatus.PENDING && order.getStripeSessionId() == null) {
+            order.setStatus(OnlineOrderStatus.EXPIRED);
+            releaseStock(order);
         }
     }
 
@@ -67,6 +94,9 @@ public class OnlineOrderService {
         if (order.getStatus() == OnlineOrderStatus.PAID) {
             return;
         }
+        if (order.getStatus() != OnlineOrderStatus.PENDING) {
+            return;
+        }
         if (("checkout.session.completed".equals(type)
                 || "checkout.session.async_payment_succeeded".equals(type))
                 && "paid".equals(session.path("payment_status").asText())) {
@@ -78,8 +108,22 @@ public class OnlineOrderService {
             }
         } else if ("checkout.session.async_payment_failed".equals(type)) {
             order.setStatus(OnlineOrderStatus.FAILED);
+            releaseStock(order);
         } else if ("checkout.session.expired".equals(type)) {
             order.setStatus(OnlineOrderStatus.EXPIRED);
+            releaseStock(order);
         }
+    }
+
+    private void releaseStock(OnlineOrder order) {
+        if (!order.isStockReserved()) {
+            return;
+        }
+        for (OnlineOrderLine line : order.getLines()) {
+            if (products.release(line.getProductId(), line.getQuantity()) != 1) {
+                throw new IllegalStateException("No se pudo liberar el stock del pedido " + order.getId());
+            }
+        }
+        order.setStockReserved(false);
     }
 }

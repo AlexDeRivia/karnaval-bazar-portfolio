@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.server.ResponseStatusException;
+import org.springframework.http.HttpStatus;
 
 import com.karnaval.entidad.Producto;
 import com.karnaval.servicio.ProductoService;
@@ -41,7 +44,9 @@ public class ProductoController {
     public String productoNuevoProcesar(
             @Valid @ModelAttribute("producto") Producto producto,
             BindingResult bindingResult,
-            Model model) {
+            Model model,
+            @RequestParam(required = false) Integer expectedStock) {
+        model.addAttribute("expectedStock", expectedStock);
         if (bindingResult.hasErrors()) {
             return "producto/productoForm"; // Shows form again with validation errors
         }
@@ -49,7 +54,10 @@ public class ProductoController {
         if (producto.getId() == null) {
             productoService.agregar(producto); // Adds new producto
         } else {
-            productoService.actualizar(producto); // Updates existing producto
+            if (expectedStock == null || !productoService.actualizarSiStockCoincide(producto, expectedStock)) {
+                model.addAttribute("saveError", "El stock cambió mientras editabas. Recarga el producto y vuelve a intentarlo.");
+                return "producto/productoForm";
+            }
         }
 
         return "redirect:/producto/index"; // Redirects to producto index page after processing
@@ -60,7 +68,11 @@ public class ProductoController {
     public String productoEditarForm(Model model,
                                      @PathVariable("id") Long id) {
         Producto buscado = productoService.buscar(id);
-        model.addAttribute("producto", buscado != null ? buscado : new Producto());
+        if (buscado == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+        model.addAttribute("producto", buscado);
+        model.addAttribute("expectedStock", buscado.getStock());
         return "producto/productoForm"; // Renders productoForm.html for editing existing producto
     }
 

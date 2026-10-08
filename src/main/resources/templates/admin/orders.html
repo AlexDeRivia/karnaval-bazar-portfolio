@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{_frag/base::site-head}"></head>
+<body>
+<div class="wrapper">
+    <header th:replace="~{_frag/base::site-header}"></header>
+    <aside th:replace="~{_frag/navbar::m_navbar}"></aside>
+    <main>
+        <h1 class="titulo-principal">Pedidos online</h1>
+        <p>Las compras confirmadas por Stripe aparecen como «PAID». Los pedidos pendientes conservan el stock hasta que la sesión expire o falle.</p>
+        <p th:if="${orders.empty}">Aún no hay pedidos online.</p>
+        <div class="table-responsive" th:unless="${orders.empty}">
+            <table class="table table-striped align-middle">
+                <thead><tr><th>Pedido</th><th>Creado</th><th>Estado</th><th>Total</th><th>Comprador</th><th></th></tr></thead>
+                <tbody>
+                    <tr th:each="order : ${orders.content}">
+                        <td th:text="${order.id}">ID</td>
+                        <td th:text="${order.createdAt}">Fecha</td>
+                        <td th:text="${order.status}">Estado</td>
+                        <td th:text="|S/ ${#numbers.formatDecimal(order.totalAmount / 100.0, 1, 2)}|">Total</td>
+                        <td th:text="${order.customerEmail ?: '—'}">Correo</td>
+                        <td><a th:href="@{/admin/pedidos/{id}(id=${order.id})}">Ver detalle</a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <nav th:if="${orders.totalPages > 1}" aria-label="Páginas de pedidos">
+            <a th:if="${orders.hasPrevious()}" th:href="@{/admin/pedidos(page=${orders.number - 1})}">Anterior</a>
+            <span th:text="|${orders.number + 1} / ${orders.totalPages}|">1 / 1</span>
+            <a th:if="${orders.hasNext()}" th:href="@{/admin/pedidos(page=${orders.number + 1})}">Siguiente</a>
+        </nav>
+    </main>
+</div>
+<div th:replace="~{_frag/base::site-scripts}"></div>
+</body>
+</html>

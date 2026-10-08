@@ -25,12 +25,16 @@ class AdminAuthenticationTests {
 
     @Test
     void configuredAdminCanSignInAndOpenPanel() throws Exception {
+        mvc.perform(get("/admin/pedidos"))
+                .andExpect(status().is3xxRedirection());
         var login = mvc.perform(formLogin("/login")
                         .user("admin-prueba").password("clave-admin-prueba-123"))
                 .andExpect(authenticated().withRoles("ADMIN"))
                 .andReturn();
         MockHttpSession session = (MockHttpSession) login.getRequest().getSession(false);
         mvc.perform(get("/producto/index").session(session))
+                .andExpect(status().isOk());
+        mvc.perform(get("/admin/pedidos").session(session))
                 .andExpect(status().isOk());
     }
 }

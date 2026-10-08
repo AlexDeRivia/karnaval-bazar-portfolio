@@ -28,6 +28,7 @@
             <h2 id="summary-title">Tu pedido</h2>
             <div class="summary-line"><span>Productos</span><span id="summary-quantity">0</span></div>
             <div class="summary-line summary-total"><span>Total</span><strong id="total">S/ 0.00</strong></div>
+            <p class="checkout-unavailable" th:if="${checkoutError}" th:text="${checkoutError}" role="alert">No pudimos iniciar el pago.</p>
             <form id="checkout-form" th:if="${checkoutEnabled}" th:action="@{/checkout}" method="post">
                 <button id="carrito-acciones-comprar" class="checkout-button" type="submit">Continuar al pago <i class="bi bi-arrow-up-right" aria-hidden="true"></i></button>
                 <small class="checkout-disclaimer">No se realizará ningún cargo real.</small>

@@ -1,5 +1,6 @@
 package com.karnaval.servicio;
 
+import java.time.Instant;
 import org.springframework.stereotype.Service;
 
 import com.karnaval.configuracion.StripeSettings;
@@ -24,6 +25,7 @@ public class StripeCheckoutGateway {
                 .setMode(SessionCreateParams.Mode.PAYMENT)
                 .addPaymentMethodType(SessionCreateParams.PaymentMethodType.CARD)
                 .setClientReferenceId(order.getId())
+                .setExpiresAt(Instant.now().plusSeconds(30 * 60).getEpochSecond())
                 .putMetadata("order_id", order.getId())
                 .setSuccessUrl(baseUrl + "/checkout/result?order=" + order.getId()
                         + "&session_id={CHECKOUT_SESSION_ID}")
@@ -44,5 +46,10 @@ public class StripeCheckoutGateway {
                 .setIdempotencyKey("online-order-" + order.getId())
                 .build();
         return Session.create(params.build(), options);
+    }
+
+    public Session retrieve(String sessionId) throws StripeException {
+        RequestOptions options = RequestOptions.builder().setApiKey(settings.secretKey()).build();
+        return Session.retrieve(sessionId, options);
     }
 }

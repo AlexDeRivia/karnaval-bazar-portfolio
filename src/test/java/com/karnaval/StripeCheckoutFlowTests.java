@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -59,6 +60,7 @@ class StripeCheckoutFlowTests {
         when(gateway.create(any())).thenReturn(session);
 
         var product = products.findAll().get(0);
+        int initialStock = product.getStock();
         mvc.perform(get("/shoopingCar/openCar"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(org.hamcrest.Matchers.containsString("checkout-form")))
@@ -70,18 +72,31 @@ class StripeCheckoutFlowTests {
         mvc.perform(post("/checkout").with(csrf()).param("item", product.getId() + ":2"))
                 .andExpect(status().is3xxRedirection());
 
-        OnlineOrder order = orders.findAll().get(0);
+        OnlineOrder order = orders.findAll().stream()
+                .filter(candidate -> session.getId().equals(candidate.getStripeSessionId()))
+                .findFirst().orElseThrow();
         assertThat(order.getStatus()).isEqualTo(OnlineOrderStatus.PENDING);
         assertThat(order.getTotalAmount()).isEqualTo(product.getPrecio().movePointRight(2).longValueExact() * 2);
+        assertThat(products.findById(product.getId()).orElseThrow().getStock()).isEqualTo(initialStock - 2);
+        mvc.perform(get("/admin/pedidos/" + order.getId()).with(user("admin").roles("ADMIN")))
+                .andExpect(status().isOk())
+                .andExpect(content().string(org.hamcrest.Matchers.containsString(product.getNombre())));
         mvc.perform(get("/checkout/result").param("order", order.getId())
                         .param("session_id", "cs_test_wrong"))
                 .andExpect(status().isNotFound());
         mvc.perform(get("/checkout/result").param("order", order.getId())
                         .param("session_id", session.getId()))
                 .andExpect(status().isOk())
+                .andExpect(org.springframework.test.web.servlet.result.MockMvcResultMatchers.header()
+                        .string("Referrer-Policy", "no-referrer"))
                 .andExpect(content().string(org.hamcrest.Matchers.containsString("Estamos confirmando")));
-        mvc.perform(get("/checkout/invoice/" + order.getId()))
+        mvc.perform(get("/checkout/invoice/" + order.getId()).param("session_id", session.getId()))
                 .andExpect(status().isConflict());
+        mvc.perform(get("/checkout/invoice/" + order.getId()).param("session_id", "cs_test_wrong"))
+                .andExpect(status().isNotFound());
+        mvc.perform(post("/stripe/webhook").contentType(MediaType.APPLICATION_JSON)
+                        .content(new byte[65_537]))
+                .andExpect(status().isPayloadTooLarge());
 
         String event = event(order, order.getTotalAmount());
         mvc.perform(post("/stripe/webhook").contentType(MediaType.APPLICATION_JSON)
@@ -100,6 +115,7 @@ class StripeCheckoutFlowTests {
                         .content(event).header("Stripe-Signature", sign(event)))
                 .andExpect(status().isOk());
         assertThat(orders.findById(order.getId()).orElseThrow().getStatus()).isEqualTo(OnlineOrderStatus.PAID);
+        assertThat(products.findById(product.getId()).orElseThrow().getStock()).isEqualTo(initialStock - 2);
         mvc.perform(get("/checkout/status/" + order.getId()))
                 .andExpect(status().isOk())
                 .andExpect(content().json("{\"status\":\"PAID\"}"));
@@ -108,7 +124,8 @@ class StripeCheckoutFlowTests {
                 .andExpect(status().isOk())
                 .andExpect(content().string(org.hamcrest.Matchers.containsString("Compra confirmada")));
 
-        byte[] pdf = mvc.perform(get("/checkout/invoice/" + order.getId()))
+        byte[] pdf = mvc.perform(get("/checkout/invoice/" + order.getId())
+                        .param("session_id", session.getId()))
                 .andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsByteArray();
         assertThat(new String(pdf, 0, 4, StandardCharsets.US_ASCII)).isEqualTo("%PDF");
@@ -120,6 +137,36 @@ class StripeCheckoutFlowTests {
             String text = new PDFTextStripper().getText(document);
             assertThat(text).contains("BAZAR CENTRAL", "FACTURA INFORMATIVA", product.getNombre());
         }
+    }
+
+    @Test
+    void expiredSessionReturnsReservedStock() throws Exception {
+        Session session = new Session();
+        session.setId("cs_test_expiration_flow_123456");
+        session.setLivemode(false);
+        session.setUrl("https://checkout.stripe.com/c/pay/expired-session");
+        when(gateway.create(any())).thenReturn(session);
+        var product = products.findAll().get(1);
+        int initialStock = product.getStock();
+
+        mvc.perform(post("/checkout").with(csrf()).param("item", product.getId() + ":1"))
+                .andExpect(status().is3xxRedirection());
+        OnlineOrder order = orders.findAll().stream()
+                .filter(candidate -> session.getId().equals(candidate.getStripeSessionId()))
+                .findFirst().orElseThrow();
+        assertThat(products.findById(product.getId()).orElseThrow().getStock()).isEqualTo(initialStock - 1);
+
+        String expired = event(order, order.getTotalAmount())
+                .replace("checkout.session.completed", "checkout.session.expired")
+                .replace("\"payment_status\":\"paid\"", "\"payment_status\":\"unpaid\"");
+        mvc.perform(post("/stripe/webhook").contentType(MediaType.APPLICATION_JSON)
+                        .content(expired).header("Stripe-Signature", sign(expired)))
+                .andExpect(status().isOk());
+        mvc.perform(post("/stripe/webhook").contentType(MediaType.APPLICATION_JSON)
+                        .content(expired).header("Stripe-Signature", sign(expired)))
+                .andExpect(status().isOk());
+        assertThat(orders.findById(order.getId()).orElseThrow().getStatus()).isEqualTo(OnlineOrderStatus.EXPIRED);
+        assertThat(products.findById(product.getId()).orElseThrow().getStock()).isEqualTo(initialStock);
     }
 
     private static String event(OnlineOrder order, long amount) {

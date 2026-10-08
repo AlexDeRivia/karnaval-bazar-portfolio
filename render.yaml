@@ -21,3 +21,9 @@ services:
         sync: false
       - key: STRIPE_PUBLISHABLE_KEY
         sync: false
+      - key: STRIPE_WEBHOOK_SECRET
+        sync: false
+      - key: ADMIN_USERNAME
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false

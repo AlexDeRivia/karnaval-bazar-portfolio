@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{_frag/store::head}"></head>
+<body class="storefront checkout-page">
+<header th:replace="~{_frag/store::checkout-header}"></header>
+<main class="checkout-layout" id="contenido">
+    <div class="checkout-intro">
+        <p class="eyebrow">Un momento</p>
+        <h1>Recibimos demasiadas solicitudes.</h1>
+        <p>Espera unos minutos y vuelve a intentarlo.</p>
+        <a class="primary-link" th:href="@{/}">Volver al catálogo</a>
+    </div>
+</main>
+</body>
+</html>

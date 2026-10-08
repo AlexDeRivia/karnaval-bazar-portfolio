@@ -15,7 +15,7 @@
             <h2 id="order-summary-title">Tu pedido</h2>
             <p>Número de pedido<br><strong th:text="${order.id}">ID</strong></p>
             <div class="checkout-panel-actions">
-                <a id="invoice-link" class="primary-link" th:classappend="${order.status.name() == 'PAID'} ? '' : ' is-hidden'" th:href="@{/checkout/invoice/{id}(id=${order.id})}">Descargar factura PDF <i class="bi bi-download" aria-hidden="true"></i></a>
+                <a id="invoice-link" class="primary-link" th:classappend="${order.status.name() == 'PAID'} ? '' : ' is-hidden'" th:href="@{/checkout/invoice/{id}(id=${order.id},session_id=${sessionId})}">Descargar comprobante PDF <i class="bi bi-download" aria-hidden="true"></i></a>
                 <a class="secondary-link" th:href="@{/}">Volver al catálogo</a>
             </div>
         </section>

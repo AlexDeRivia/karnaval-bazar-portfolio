@@ -9,6 +9,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
@@ -28,21 +31,28 @@ public class Producto {
 	private String nombre;
 
 	@Column(nullable = false)
-	@PositiveOrZero(message = "El precio del producto no puede ser menor a 0")
+	@NotNull(message = "Ingresa un precio")
+	@DecimalMin(value = "0.01", message = "El precio debe ser mayor que cero")
+	@Digits(integer = 9, fraction = 2, message = "El precio admite hasta dos decimales")
 	private BigDecimal precio;
 
 	@Column(nullable = false)
+	@NotNull(message = "Ingresa el stock")
 	@PositiveOrZero(message = "El stock del producto no puede ser menor a 0")
 	private Integer stock;
 
+	@Size(max = 255, message = "La descripción no puede exceder 255 caracteres")
 	private String descripcion;
 	
+	@Size(max = 255, message = "La ubicación no puede exceder 255 caracteres")
 	private String ubicacionAlmacen;
 
+	@Size(max = 255, message = "La URL no puede exceder 255 caracteres")
 	private String foto;
 
 	@Column(length = 40, nullable = false)
 	@NotBlank(message = "La categoría no puede estar en blanco")
+	@Size(max = 40, message = "La categoría no puede exceder 40 caracteres")
 	private String categoria;
 	
 	public Producto(String nombre, BigDecimal precio, Integer stock, String descripcion, String ubicacionAlmacen, String foto, String categoria) {
