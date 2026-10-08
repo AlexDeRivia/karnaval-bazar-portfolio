@@ -65,6 +65,6 @@ La URL de retorno solo muestra el estado; no confirma el pedido por sí sola. Si
 
 ## Despliegue
 
-El `Dockerfile` construye un ejecutable con Java 21 y ejecuta la aplicación como usuario sin privilegios. `render.yaml` define un servicio web con PostgreSQL externo, catálogo inicial y las variables de Stripe y administración. Tras crear el servicio, registra su URL de webhook en Stripe y añade `STRIPE_WEBHOOK_SECRET` en Render para habilitar el botón de compra. El checkout y el login tienen límites de solicitudes por IP dentro del proceso; configura también límites en el borde si usas varias instancias.
+El `Dockerfile` construye un ejecutable con Java 21 y ejecuta la aplicación como usuario sin privilegios. `render.yaml` define un servicio web con PostgreSQL externo y catálogo inicial. Tras crear el servicio, registra su URL de webhook en Stripe, añade `STRIPE_WEBHOOK_SECRET` en Render y activa `CHECKOUT_MODE=stripe-test` para habilitar el botón de compra. El checkout y el login tienen límites de solicitudes por IP dentro del proceso; configura también límites en el borde si usas varias instancias.
 
 El plan gratuito de Render puede suspender el servicio tras inactividad y tardar en volver a iniciarlo. Consulta [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) para los pasos de configuración y las limitaciones del alojamiento.
