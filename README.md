@@ -1,6 +1,8 @@
-# Casa Lumbre
+# Bazar Central
 
-Sistema web de Casa Lumbre para consultar el catálogo de productos y gestionar clientes, empleados, proveedores, productos y compras. Está desarrollado con Spring Boot, Thymeleaf, Spring Security y JPA.
+Sistema web de Bazar Central para consultar el catálogo de productos y gestionar clientes, empleados, proveedores, productos y compras. Está desarrollado con Spring Boot, Thymeleaf, Spring Security y JPA.
+
+La tienda pública permite recorrer las categorías, ordenar productos y ajustar el carrito antes de continuar al pago. La página de confirmación muestra el estado del pedido y habilita la descarga del PDF cuando Stripe confirma el pago.
 
 ## Estado del proyecto
 

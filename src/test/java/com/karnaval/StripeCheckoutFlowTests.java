@@ -118,7 +118,7 @@ class StripeCheckoutFlowTests {
         }
         try (var document = Loader.loadPDF(pdf)) {
             String text = new PDFTextStripper().getText(document);
-            assertThat(text).contains("CASA LUMBRE", "FACTURA INFORMATIVA", product.getNombre());
+            assertThat(text).contains("BAZAR CENTRAL", "FACTURA INFORMATIVA", product.getNombre());
         }
     }
 

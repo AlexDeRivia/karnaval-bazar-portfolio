@@ -1,60 +1,94 @@
 <!DOCTYPE html>
-<html lang="es">
-<head th:replace="~{_frag/base::site-head}"></head>
-<body>
-    <div class="wrapper">
-        <header th:replace="~{_frag/base::site-header}"></header>
-        <aside>
-            <div th:replace="~{_frag/base::site-menu}"></div>
-            <nav>
-                <ul class="menu">
-                    <li>
-                        <button id="todos" class="boton-menu boton-categoria active"><i class="bi bi-hand-index-thumb-fill"></i> Todos los productos</button>
-                    </li>
-                    <li>
-                        <button id="tecnologia" class="boton-menu boton-categoria"><i class="bi bi-hand-index-thumb"></i>Tecnología</button>
-                    </li>
-                    <li>
-                        <button id="accesorios-mujer" class="boton-menu boton-categoria"><i class="bi bi-hand-index-thumb"></i>Accesorios para Mujeres</button>
-                    </li>
-                    <li>
-                        <button id="adornos-hogar" class="boton-menu boton-categoria"><i class="bi bi-hand-index-thumb"></i>Adornos del Hogar</button>
-                    </li>
-					<li>
-						<button id="vestimenta" class="boton-menu boton-categoria"><i class="bi bi-hand-index-thumb"></i>Vestimenta</button>
-					</li>
-					<li>
-						<button id="aseo-limpieza" class="boton-menu boton-categoria"><i class="bi bi-hand-index-thumb"></i>Aseo y Limpieza</button>
-					</li>
-                    <li>
-                        <a class="boton-menu boton-carrito" th:href="@{/shoopingCar/openCar}">
-                            <i class="bi bi-cart-fill"></i> Carrito <span id="numerito" class="numerito">0</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-            <footer th:replace="~{_frag/base::site-footer}"></footer>
-        </aside>
-        <main>
-            <h2 class="titulo-principal" id="titulo-principal">Todos los productos</h2>
-			<section class="contenedor-productos" id="contenedor-productos"></section>
-			
-            <template id="section-productos" class="section-productos">
-                <!-- Esto se va a rellenar con JS -->
-				<figure class="producto">
-				    <img class="producto-imagen">
-				    <figcaption class="producto-detalles">
-						<h3 class="producto-titulo"></h3>
-						<p class="producto-precio"></p>
-						<button class="producto-agregar" id="">Agregar</button>
-					</figcaption>
-				</figure>
-            </template>
-        </main>
-    </div>
-    
-	<div th:replace="~{_frag/base::site-scripts}"></div>
-    <script th:src="@{/js/main.js}" type ="module"></script>
-	
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{_frag/store::head}"></head>
+<body class="storefront home-page">
+    <a class="skip-link" href="#contenido">Saltar al contenido</a>
+    <header th:replace="~{_frag/store::storefront-header}"></header>
+
+    <main id="contenido">
+        <section class="intro wrap" aria-labelledby="intro-title">
+            <div class="intro-copy">
+                <p class="eyebrow"><span class="eyebrow-line"></span> BAZAR CENTRAL · DESDE 2024</p>
+                <h1 id="intro-title">De todo un poco.<br><em>Bien elegido.</em></h1>
+                <p class="intro-description">Tecnología, accesorios, hogar y esenciales que acompañan cada día. Recorre el bazar y encuentra tu próximo favorito.</p>
+                <a class="editorial-link" href="#catalogo">Explorar el catálogo <i class="bi bi-arrow-down-right" aria-hidden="true"></i></a>
+                <span class="intro-index">01 / UN LUGAR PARA DESCUBRIR</span>
+            </div>
+            <div class="intro-composition" aria-label="Selección de artículos del bazar">
+                <figure class="intro-photo intro-photo-main">
+                    <img th:src="@{/img/accesorios_mujer/01.jpg}" alt="Accesorio de moda disponible en el bazar" fetchpriority="high">
+                    <figcaption>ACCESORIOS <span>01</span></figcaption>
+                </figure>
+                <figure class="intro-photo intro-photo-tech">
+                    <img th:src="@{/img/tecnologia/01.jpg}" alt="Auriculares disponibles en el bazar">
+                    <figcaption>TECNOLOGÍA <span>02</span></figcaption>
+                </figure>
+                <figure class="intro-photo intro-photo-home">
+                    <img th:src="@{/img/adornos_hogar/03.jpg}" alt="Velas disponibles en el bazar">
+                    <figcaption>HOGAR <span>03</span></figcaption>
+                </figure>
+            </div>
+        </section>
+
+        <section class="catalog-section" id="catalogo" aria-labelledby="titulo-principal">
+            <div class="wrap">
+                <div class="section-heading">
+                    <div>
+                        <p class="eyebrow"><span class="eyebrow-line"></span> NUESTRA SELECCIÓN</p>
+                        <h2 id="titulo-principal">Explora el bazar<span class="title-period">.</span></h2>
+                    </div>
+                    <p>Objetos distintos para momentos distintos.<br>Todo en un mismo lugar.</p>
+                </div>
+
+                <div class="catalog-controls">
+                    <div class="category-filters" role="group" aria-label="Filtrar por categoría">
+                        <button id="todos" class="boton-categoria active" type="button" aria-pressed="true">Todos</button>
+                        <button id="tecnologia" class="boton-categoria" type="button" aria-pressed="false">Tecnología</button>
+                        <button id="accesorios-mujer" class="boton-categoria" type="button" aria-pressed="false">Accesorios</button>
+                        <button id="adornos-hogar" class="boton-categoria" type="button" aria-pressed="false">Hogar</button>
+                        <button id="vestimenta" class="boton-categoria" type="button" aria-pressed="false">Moda</button>
+                        <button id="aseo-limpieza" class="boton-categoria" type="button" aria-pressed="false">Limpieza</button>
+                    </div>
+                    <div class="catalog-toolbar">
+                        <p id="catalog-count" aria-live="polite">Cargando productos…</p>
+                        <label for="catalog-sort">Ordenar</label>
+                        <select id="catalog-sort" aria-label="Ordenar productos">
+                            <option value="default">Selección original</option>
+                            <option value="price-asc">Menor precio</option>
+                            <option value="price-desc">Mayor precio</option>
+                            <option value="name">Nombre A–Z</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="catalog-loading" class="catalog-loading" aria-hidden="true">
+                    <div></div><div></div><div></div><div></div>
+                </div>
+                <div id="catalog-status" class="catalog-status" role="status" aria-live="polite"></div>
+                <div id="contenedor-productos" class="product-grid"></div>
+                <div class="catalog-more-wrap"><button id="catalog-more" class="catalog-more" type="button" hidden>Ver más productos <i class="bi bi-arrow-down" aria-hidden="true"></i></button></div>
+            </div>
+        </section>
+
+        <template id="section-productos">
+            <article class="product-card">
+                <div class="product-media">
+                    <img class="producto-imagen" alt="" loading="lazy" decoding="async">
+                    <span class="product-category"></span>
+                </div>
+                <div class="producto-detalles">
+                    <div>
+                        <h3 class="producto-titulo"></h3>
+                        <p class="producto-precio"></p>
+                    </div>
+                    <button class="producto-agregar" type="button">Añadir <i class="bi bi-arrow-up-right" aria-hidden="true"></i></button>
+                </div>
+            </article>
+        </template>
+    </main>
+
+    <div id="store-notice" class="store-notice" role="status" aria-live="polite" aria-atomic="true"></div>
+    <footer th:replace="~{_frag/store::footer}"></footer>
+    <script th:src="@{/js/main.js}" type="module"></script>
 </body>
 </html>

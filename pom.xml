@@ -11,8 +11,8 @@
 	<groupId>com.karnaval</groupId>
 	<artifactId>KarnavalBazaar</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>Casa Lumbre</name>
-	<description>Catálogo y gestión comercial de Casa Lumbre con Spring Boot y Spring Data JPA</description>
+	<name>Bazar Central</name>
+	<description>Catálogo y gestión comercial de Bazar Central con Spring Boot y Spring Data JPA</description>
 	<properties>
 		<java.version>21</java.version>
 	</properties>

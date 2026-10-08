@@ -34,7 +34,7 @@ public class InvoicePdfService {
                 canvas.addRect(0, 772, 595, 70);
                 canvas.fill();
                 canvas.setNonStrokingColor(Color.WHITE);
-                write(canvas, BOLD, 18, 48, 801, "CASA LUMBRE");
+                write(canvas, BOLD, 18, 48, 801, "BAZAR CENTRAL");
                 write(canvas, REGULAR, 9, 48, 785, "FACTURA INFORMATIVA - SIN VALIDEZ TRIBUTARIA");
 
                 canvas.setNonStrokingColor(new Color(31, 46, 44));

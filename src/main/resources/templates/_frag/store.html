@@ -1,0 +1,40 @@
+<head th:fragment="head">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f6f1e8">
+    <meta name="description" content="Explora tecnología, accesorios, hogar, moda y esenciales en Bazar Central.">
+    <title>Bazar Central</title>
+    <link rel="icon" type="image/png" sizes="64x64" th:href="@{/favicon.png}">
+    <link rel="icon" type="image/svg+xml" th:href="@{/favicon.svg}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" th:href="@{/css/storefront.css}">
+</head>
+
+<header class="store-header" th:fragment="storefront-header">
+    <div class="store-header-inner">
+        <a class="store-brand" th:href="@{/}" aria-label="Bazar Central, ir al inicio">Bazar <span>Central</span><b aria-hidden="true">.</b></a>
+        <nav class="store-nav" aria-label="Navegación principal">
+            <a class="nav-home" th:href="@{/}">Inicio</a>
+            <a class="nav-catalog" th:href="@{/#catalogo}">Catálogo</a>
+            <a class="nav-cart" th:href="@{/shoopingCar/openCar}" aria-label="Ver carrito">
+                <i class="bi bi-bag" aria-hidden="true"></i><span>Carrito</span>
+                <span id="numerito" class="cart-count" aria-label="0 productos">0</span>
+            </a>
+        </nav>
+    </div>
+</header>
+
+<header class="store-header" th:fragment="checkout-header">
+    <div class="store-header-inner">
+        <a class="store-brand" th:href="@{/}" aria-label="Bazar Central, ir al inicio">Bazar <span>Central</span><b aria-hidden="true">.</b></a>
+        <a class="header-back" th:href="@{/}"><i class="bi bi-arrow-left" aria-hidden="true"></i> Volver al catálogo</a>
+    </div>
+</header>
+
+<footer class="store-footer" th:fragment="footer">
+    <span>© 2024 Bazar Central</span>
+    <span>Hallazgos para todos los días.</span>
+</footer>

@@ -1,16 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;800;900&display=swap');
 
 :root {
-    --clr-main: #4b33a8;
-    --clr-main-light: #785ce9;
-    --clr-white: #ececec;
-    --clr-gray: #e2e2e2;
-    --clr-red: #961818;
+    --clr-main: #223229;
+    --clr-main-light: #b35430;
+    --clr-white: #f6f1e8;
+    --clr-gray: #e8dcc9;
+    --clr-red: #9b3e2b;
 }
 
 .checkout-page {
     min-height: 100vh;
-    background: #f1effa;
+    background: #f6f1e8;
     display: grid;
     place-items: center;
     padding: 1rem;
@@ -21,7 +21,7 @@
     border-radius: 1rem;
     padding: 2rem;
     width: min(100%, 36rem);
-    box-shadow: 0 1rem 3rem #30206422;
+    box-shadow: 0 1rem 3rem #22322922;
 }
 
 .checkout-card h1,

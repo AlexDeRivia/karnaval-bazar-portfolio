@@ -1,11 +1,24 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{_frag/base::site-head}"></head>
-<body class="checkout-page">
-    <main class="checkout-card">
-        <h1>Pago interrumpido</h1>
-        <p>No se confirmó el pedido. Tus productos siguen en el carrito para que puedas intentarlo de nuevo.</p>
-        <a class="btn btn-primary" th:href="@{/shoopingCar/openCar}">Volver al carrito</a>
+<head th:replace="~{_frag/store::head}"></head>
+<body class="storefront checkout-page">
+    <a class="skip-link" href="#contenido">Saltar al contenido</a>
+    <header th:replace="~{_frag/store::checkout-header}"></header>
+    <main class="checkout-layout" id="contenido">
+        <div class="checkout-intro">
+            <p class="eyebrow"><span class="eyebrow-line"></span> TU COMPRA</p>
+            <h1>Tu compra quedó en pausa<span class="title-period">.</span></h1>
+            <p>No se confirmó el pedido. Tus productos siguen en el carrito para que puedas continuar cuando quieras.</p>
+        </div>
+        <section class="checkout-panel" aria-labelledby="next-step-title">
+            <p class="summary-index">SIGUIENTE PASO / 01</p>
+            <h2 id="next-step-title">Continúa a tu ritmo</h2>
+            <p>Tu selección te espera en el carrito.</p>
+            <div class="checkout-panel-actions">
+                <a class="primary-link" th:href="@{/shoopingCar/openCar}">Volver al carrito <i class="bi bi-arrow-up-right" aria-hidden="true"></i></a>
+            </div>
+        </section>
     </main>
+    <footer th:replace="~{_frag/store::footer}"></footer>
 </body>
 </html>

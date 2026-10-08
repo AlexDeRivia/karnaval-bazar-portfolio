@@ -1,58 +1,63 @@
 <!DOCTYPE html>
-<html lang="es">
-<head th:replace="~{_frag/base::site-head}"></head>
-<body>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{_frag/store::head}"></head>
+<body class="storefront cart-page">
+    <a class="skip-link" href="#contenido">Saltar al contenido</a>
+    <header th:replace="~{_frag/store::storefront-header}"></header>
 
-    <div class="wrapper">
-        <header th:replace="~{_frag/base::site-header}"></header>
-        <aside>
-            <div th:replace="~{_frag/base::site-menu}"></div>
-            <nav>
-                <ul>
-                    <li>
-                        <a class="boton-menu boton-volver" th:href="@{/}">
-                            <i class="bi bi-arrow-return-left"></i> Seguir comprando
-                        </a>
-                    </li>
-                    <li>
-                        <a class="boton-menu boton-carrito active" th:href="@{/shoopingCar/openCar}">
-                            <i class="bi bi-cart-fill"></i> Carrito
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-            <footer th:replace="~{_frag/base::site-footer}"></footer>
-        </aside>
-        <main>
-            <h2 class="titulo-principal">Carrito</h2>
-            <div class="contenedor-carrito">
-                <p id="carrito-vacio" class="carrito-vacio">Tu carrito está vacío. <i class="bi bi-emoji-frown"></i></p>
-
-                <div id="carrito-productos" class="carrito-productos disabled">
-                    <!-- Esto se va a completar con el JS -->
-                </div>
-
-                <div id="carrito-acciones" class="carrito-acciones disabled">
-                    <div class="carrito-acciones-izquierda">
-                        <button id="carrito-acciones-vaciar" class="carrito-acciones-vaciar">Vaciar carrito</button>
-                    </div>
-                    <div class="carrito-acciones-derecha">
-                        <div class="carrito-acciones-total">
-                            <p>Total:</p>
-                            <p id="total">S/ 0.00</p>
-                        </div>
-                        <form id="checkout-form" th:if="${checkoutEnabled}" th:action="@{/checkout}" method="post">
-                            <button id="carrito-acciones-comprar" class="carrito-acciones-comprar" type="submit">Continuar</button>
-                            <small class="checkout-disclaimer">No se realizará ningún cargo real.</small>
-                        </form>
-                        <p th:unless="${checkoutEnabled}">Checkout no disponible</p>
-                    </div>
-                </div>
+    <main id="contenido" class="wrap cart-layout">
+        <section class="cart-content" aria-labelledby="cart-title">
+            <p class="eyebrow"><span class="eyebrow-line"></span> TU SELECCIÓN</p>
+            <div class="cart-title-row">
+                <h1 id="cart-title">Tu carrito<span class="title-period">.</span></h1>
+                <a class="editorial-link" th:href="@{/#catalogo}">Seguir explorando <i class="bi bi-arrow-up-right" aria-hidden="true"></i></a>
             </div>
-        </main>
-    </div>
-    
-	<div th:replace="~{_frag/base::site-scripts}"></div>
-	<script th:src="@{/js/carrito.js}" type="module"></script>
+            <p id="cart-status" class="cart-status" role="status" aria-live="polite">Preparando tu carrito…</p>
+            <div id="carrito-vacio" class="cart-empty" hidden>
+                <span class="empty-mark" aria-hidden="true"><i class="bi bi-bag"></i></span>
+                <h2>Aún hay espacio para un hallazgo.</h2>
+                <p>Explora la selección y agrega lo que te guste.</p>
+                <a class="primary-link" th:href="@{/#catalogo}">Ver productos <i class="bi bi-arrow-up-right" aria-hidden="true"></i></a>
+            </div>
+            <div id="carrito-productos" class="cart-items" hidden></div>
+            <button id="carrito-acciones-vaciar" class="clear-cart" type="button" hidden>Vaciar carrito</button>
+        </section>
+
+        <aside id="carrito-acciones" class="cart-summary" aria-labelledby="summary-title" hidden>
+            <p class="summary-index">RESUMEN / 01</p>
+            <h2 id="summary-title">Tu pedido</h2>
+            <div class="summary-line"><span>Productos</span><span id="summary-quantity">0</span></div>
+            <div class="summary-line summary-total"><span>Total</span><strong id="total">S/ 0.00</strong></div>
+            <form id="checkout-form" th:if="${checkoutEnabled}" th:action="@{/checkout}" method="post">
+                <button id="carrito-acciones-comprar" class="checkout-button" type="submit">Continuar al pago <i class="bi bi-arrow-up-right" aria-hidden="true"></i></button>
+                <small class="checkout-disclaimer">No se realizará ningún cargo real.</small>
+            </form>
+            <p class="checkout-unavailable" th:unless="${checkoutEnabled}">El pago en línea no está disponible en este momento.</p>
+        </aside>
+
+        <template id="cart-item-template">
+            <article class="cart-item">
+                <div class="cart-item-image"><img alt="" loading="lazy"></div>
+                <div class="cart-item-details">
+                    <span class="cart-item-category"></span>
+                    <h3 class="cart-item-name"></h3>
+                    <span class="cart-item-price"></span>
+                    <div class="quantity-control" aria-label="Cantidad">
+                        <button type="button" data-action="decrement" aria-label="Reducir cantidad">−</button>
+                        <span class="cart-item-quantity"></span>
+                        <button type="button" data-action="increment" aria-label="Aumentar cantidad">+</button>
+                    </div>
+                </div>
+                <div class="cart-item-end">
+                    <strong class="cart-item-subtotal"></strong>
+                    <button type="button" class="cart-item-remove" data-action="remove" aria-label="Quitar producto"><i class="bi bi-trash3" aria-hidden="true"></i></button>
+                </div>
+            </article>
+        </template>
+    </main>
+
+    <div id="store-notice" class="store-notice" role="status" aria-live="polite" aria-atomic="true"></div>
+    <footer th:replace="~{_frag/store::footer}"></footer>
+    <script th:src="@{/js/carrito.js}" type="module"></script>
 </body>
 </html>

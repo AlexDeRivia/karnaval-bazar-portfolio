@@ -36,10 +36,10 @@ class KarnavalBazaarApplicationTests {
     void publicCatalogAndCartRender() throws Exception {
         mvc.perform(get("/"))
                 .andExpect(status().isOk())
-                .andExpect(content().string(org.hamcrest.Matchers.containsString("Casa Lumbre")));
+                .andExpect(content().string(org.hamcrest.Matchers.containsString("Bazar Central")));
         mvc.perform(get("/shoopingCar/openCar"))
                 .andExpect(status().isOk())
-                .andExpect(content().string(org.hamcrest.Matchers.containsString("Checkout no disponible")));
+                .andExpect(content().string(org.hamcrest.Matchers.containsString("El pago en línea no está disponible")));
         mvc.perform(get("/api/catalog"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(50)))

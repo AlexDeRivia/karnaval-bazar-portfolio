@@ -1,14 +1,26 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{_frag/base::site-head}"></head>
-<body class="checkout-page">
-    <main class="checkout-card" id="order-result" th:attr="data-order-id=${order.id},data-order-status=${order.status}">
-        <h1 id="order-title" th:text="${order.status.name() == 'PAID'} ? 'Compra confirmada' : 'Estamos confirmando tu pago'">Resultado de compra</h1>
-        <p id="order-message" th:text="${order.status.name() == 'PAID'} ? 'Tu pedido fue confirmado. Puedes descargar tu comprobante.' : 'Recibimos tu regreso de Stripe. El pedido se confirmará cuando llegue la notificación de pago.'">Estado del pedido</p>
-        <p>Pedido <strong th:text="${order.id}">ID</strong></p>
-        <a id="invoice-link" class="btn btn-primary" th:classappend="${order.status.name() == 'PAID'} ? '' : ' d-none'" th:href="@{/checkout/invoice/{id}(id=${order.id})}">Descargar factura PDF</a>
-        <a class="btn btn-outline-secondary" th:href="@{/}">Volver al catálogo</a>
+<head th:replace="~{_frag/store::head}"></head>
+<body class="storefront checkout-page">
+    <a class="skip-link" href="#contenido">Saltar al contenido</a>
+    <header th:replace="~{_frag/store::checkout-header}"></header>
+    <main class="checkout-layout" id="contenido">
+        <div class="checkout-intro" id="order-result" th:attr="data-order-id=${order.id},data-order-status=${order.status}">
+            <p class="eyebrow"><span class="eyebrow-line"></span> TU COMPRA</p>
+            <h1 id="order-title" th:text="${order.status.name() == 'PAID'} ? 'Compra confirmada.' : 'Estamos confirmando tu pago.'">Estado de compra</h1>
+            <p id="order-message" role="status" aria-live="polite" th:text="${order.status.name() == 'PAID'} ? 'Tu pedido fue confirmado. Puedes descargar tu comprobante.' : 'Recibimos tu regreso de Stripe. El pedido se confirmará cuando llegue la notificación de pago.'">Estado del pedido</p>
+        </div>
+        <section class="checkout-panel" aria-labelledby="order-summary-title">
+            <p class="summary-index">ESTADO DEL PEDIDO / 01</p>
+            <h2 id="order-summary-title">Tu pedido</h2>
+            <p>Número de pedido<br><strong th:text="${order.id}">ID</strong></p>
+            <div class="checkout-panel-actions">
+                <a id="invoice-link" class="primary-link" th:classappend="${order.status.name() == 'PAID'} ? '' : ' is-hidden'" th:href="@{/checkout/invoice/{id}(id=${order.id})}">Descargar factura PDF <i class="bi bi-download" aria-hidden="true"></i></a>
+                <a class="secondary-link" th:href="@{/}">Volver al catálogo</a>
+            </div>
+        </section>
     </main>
+    <footer th:replace="~{_frag/store::footer}"></footer>
     <script th:src="@{/js/order-result.js}" type="module"></script>
 </body>
 </html>

@@ -7,7 +7,7 @@ function render(status) {
     if (status === "PAID") {
         title.textContent = "Compra confirmada";
         message.textContent = "Tu pedido fue confirmado. Puedes descargar tu comprobante.";
-        invoice.classList.remove("d-none");
+        invoice.classList.remove("is-hidden");
         localStorage.removeItem("productos-en-carrito");
         return true;
     }
