@@ -1,6 +1,7 @@
 package com.karnaval.servicio;
 
 import java.time.Instant;
+import java.util.Map;
 import org.springframework.stereotype.Service;
 
 import com.karnaval.configuracion.StripeSettings;
@@ -21,8 +22,11 @@ public class StripeCheckoutGateway {
 
     public Session create(OnlineOrder order) throws StripeException {
         String baseUrl = settings.baseUrl();
+        // Managed Payments only supports digital products; this catalog contains physical goods.
         SessionCreateParams.Builder params = SessionCreateParams.builder()
                 .setMode(SessionCreateParams.Mode.PAYMENT)
+                .addPaymentMethodType(SessionCreateParams.PaymentMethodType.CARD)
+                .putExtraParam("managed_payments", Map.of("enabled", false))
                 .setClientReferenceId(order.getId())
                 .setExpiresAt(Instant.now().plusSeconds(30 * 60).getEpochSecond())
                 .putMetadata("order_id", order.getId())
