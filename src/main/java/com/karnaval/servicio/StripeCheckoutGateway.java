@@ -23,7 +23,6 @@ public class StripeCheckoutGateway {
         String baseUrl = settings.baseUrl();
         SessionCreateParams.Builder params = SessionCreateParams.builder()
                 .setMode(SessionCreateParams.Mode.PAYMENT)
-                .addPaymentMethodType(SessionCreateParams.PaymentMethodType.CARD)
                 .setClientReferenceId(order.getId())
                 .setExpiresAt(Instant.now().plusSeconds(30 * 60).getEpochSecond())
                 .putMetadata("order_id", order.getId())
