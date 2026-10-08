@@ -1,0 +1,502 @@
+[
+    {
+        "id": "tecnologia-01",
+        "titulo": "Auriculares Bluetooth",
+        "imagen": "./img/tecnologia/01.jpg",
+        "categoria": {
+            "nombre": "Tecnología",
+            "id": "tecnologia"
+        },
+        "precio": 500
+    },
+    {
+        "id": "tecnologia-02",
+        "titulo": "Cargador Rápido",
+        "imagen": "./img/tecnologia/02.jpg",
+        "categoria": {
+            "nombre": "Tecnología",
+            "id": "tecnologia"
+        },
+        "precio": 300
+    },
+    {
+        "id": "tecnologia-03",
+        "titulo": "Smartwatch",
+        "imagen": "./img/tecnologia/03.jpg",
+        "categoria": {
+            "nombre": "Tecnología",
+            "id": "tecnologia"
+        },
+        "precio": 1500
+    },
+    {
+        "id": "tecnologia-04",
+        "titulo": "Teclado Mecánico",
+        "imagen": "./img/tecnologia/04.jpg",
+        "categoria": {
+            "nombre": "Tecnología",
+            "id": "tecnologia"
+        },
+        "precio": 800
+    },
+    {
+        "id": "tecnologia-05",
+        "titulo": "Mouse Gamer",
+        "imagen": "./img/tecnologia/05.jpg",
+        "categoria": {
+            "nombre": "Tecnología",
+            "id": "tecnologia"
+        },
+        "precio": 600
+    },
+    {
+        "id": "tecnologia-06",
+        "titulo": "Tablet",
+        "imagen": "./img/tecnologia/06.jpg",
+        "categoria": {
+            "nombre": "Tecnología",
+            "id": "tecnologia"
+        },
+        "precio": 2000
+    },
+    {
+        "id": "tecnologia-07",
+        "titulo": "Monitor 4K",
+        "imagen": "./img/tecnologia/07.jpg",
+        "categoria": {
+            "nombre": "Tecnología",
+            "id": "tecnologia"
+        },
+        "precio": 3000
+    },
+    {
+        "id": "tecnologia-08",
+        "titulo": "Disco Duro Externo",
+        "imagen": "./img/tecnologia/08.jpg",
+        "categoria": {
+            "nombre": "Tecnología",
+            "id": "tecnologia"
+        },
+        "precio": 1200
+    },
+    {
+        "id": "tecnologia-09",
+        "titulo": "Cámara Web",
+        "imagen": "./img/tecnologia/09.jpg",
+        "categoria": {
+            "nombre": "Tecnología",
+            "id": "tecnologia"
+        },
+        "precio": 700
+    },
+    {
+        "id": "tecnologia-10",
+        "titulo": "Altavoz Bluetooth",
+        "imagen": "./img/tecnologia/10.jpg",
+        "categoria": {
+            "nombre": "Tecnología",
+            "id": "tecnologia"
+        },
+        "precio": 900
+    },
+    {
+        "id": "accesorios-mujer-01",
+        "titulo": "Lazo para el Pelo",
+        "imagen": "./img/accesorios_mujer/01.jpg",
+        "categoria": {
+            "nombre": "Accesorios para Mujeres",
+            "id": "accesorios-mujer"
+        },
+        "precio": 100
+    },
+    {
+        "id": "accesorios-mujer-02",
+        "titulo": "Aretes de Oro",
+        "imagen": "./img/accesorios_mujer/02.jpg",
+        "categoria": {
+            "nombre": "Accesorios para Mujeres",
+            "id": "accesorios-mujer"
+        },
+        "precio": 300
+    },
+    {
+        "id": "accesorios-mujer-03",
+        "titulo": "Collar de Perlas",
+        "imagen": "./img/accesorios_mujer/03.jpg",
+        "categoria": {
+            "nombre": "Accesorios para Mujeres",
+            "id": "accesorios-mujer"
+        },
+        "precio": 500
+    },
+    {
+        "id": "accesorios-mujer-04",
+        "titulo": "Pulsera de Plata",
+        "imagen": "./img/accesorios_mujer/04.jpg",
+        "categoria": {
+            "nombre": "Accesorios para Mujeres",
+            "id": "accesorios-mujer"
+        },
+        "precio": 200
+    },
+    {
+        "id": "accesorios-mujer-05",
+        "titulo": "Anillo de Diamantes",
+        "imagen": "./img/accesorios_mujer/05.jpg",
+        "categoria": {
+            "nombre": "Accesorios para Mujeres",
+            "id": "accesorios-mujer"
+        },
+        "precio": 1000
+    },
+    {
+        "id": "accesorios-mujer-06",
+        "titulo": "Gafas de Sol",
+        "imagen": "./img/accesorios_mujer/06.jpg",
+        "categoria": {
+            "nombre": "Accesorios para Mujeres",
+            "id": "accesorios-mujer"
+        },
+        "precio": 400
+    },
+    {
+        "id": "accesorios-mujer-07",
+        "titulo": "Sombrero de Verano",
+        "imagen": "./img/accesorios_mujer/07.jpg",
+        "categoria": {
+            "nombre": "Accesorios para Mujeres",
+            "id": "accesorios-mujer"
+        },
+        "precio": 250
+    },
+    {
+        "id": "accesorios-mujer-08",
+        "titulo": "Bufanda de Seda",
+        "imagen": "./img/accesorios_mujer/08.jpg",
+        "categoria": {
+            "nombre": "Accesorios para Mujeres",
+            "id": "accesorios-mujer"
+        },
+        "precio": 350
+    },
+    {
+        "id": "accesorios-mujer-09",
+        "titulo": "Reloj de Pulsera",
+        "imagen": "./img/accesorios_mujer/09.jpg",
+        "categoria": {
+            "nombre": "Accesorios para Mujeres",
+            "id": "accesorios-mujer"
+        },
+        "precio": 800
+    },
+    {
+        "id": "accesorios-mujer-10",
+        "titulo": "Bolso de Cuero",
+        "imagen": "./img/accesorios_mujer/10.jpg",
+        "categoria": {
+            "nombre": "Accesorios para Mujeres",
+            "id": "accesorios-mujer"
+        },
+        "precio": 600
+    },
+    {
+        "id": "adornos-hogar-01",
+        "titulo": "Macetero de Cerámica",
+        "imagen": "./img/adornos_hogar/01.jpg",
+        "categoria": {
+            "nombre": "Adornos del Hogar",
+            "id": "adornos-hogar"
+        },
+        "precio": 200
+    },
+    {
+        "id": "adornos-hogar-02",
+        "titulo": "Cuadro Decorativo",
+        "imagen": "./img/adornos_hogar/02.jpg",
+        "categoria": {
+            "nombre": "Adornos del Hogar",
+            "id": "adornos-hogar"
+        },
+        "precio": 400
+    },
+    {
+        "id": "adornos-hogar-03",
+        "titulo": "Vela Aromática",
+        "imagen": "./img/adornos_hogar/03.jpg",
+        "categoria": {
+            "nombre": "Adornos del Hogar",
+            "id": "adornos-hogar"
+        },
+        "precio": 150
+    },
+    {
+        "id": "adornos-hogar-04",
+        "titulo": "Reloj de Pared",
+        "imagen": "./img/adornos_hogar/04.jpg",
+        "categoria": {
+            "nombre": "Adornos del Hogar",
+            "id": "adornos-hogar"
+        },
+        "precio": 500
+    },
+    {
+        "id": "adornos-hogar-05",
+        "titulo": "Espejo Decorativo",
+        "imagen": "./img/adornos_hogar/05.jpg",
+        "categoria": {
+            "nombre": "Adornos del Hogar",
+            "id": "adornos-hogar"
+        },
+        "precio": 700
+    },
+    {
+        "id": "adornos-hogar-06",
+        "titulo": "Alfombra",
+        "imagen": "./img/adornos_hogar/06.jpg",
+        "categoria": {
+            "nombre": "Adornos del Hogar",
+            "id": "adornos-hogar"
+        },
+        "precio": 1000
+    },
+    {
+        "id": "adornos-hogar-07",
+        "titulo": "Lámpara de Mesa",
+        "imagen": "./img/adornos_hogar/07.jpg",
+        "categoria": {
+            "nombre": "Adornos del Hogar",
+            "id": "adornos-hogar"
+        },
+        "precio": 800
+    },
+    {
+        "id": "adornos-hogar-08",
+        "titulo": "Florero",
+        "imagen": "./img/adornos_hogar/08.jpg",
+        "categoria": {
+            "nombre": "Adornos del Hogar",
+            "id": "adornos-hogar"
+        },
+        "precio": 250
+    },
+    {
+        "id": "adornos-hogar-09",
+        "titulo": "Figura de Cerámica",
+        "imagen": "./img/adornos_hogar/09.jpg",
+        "categoria": {
+            "nombre": "Adornos del Hogar",
+            "id": "adornos-hogar"
+        },
+        "precio": 300
+    },
+    {
+        "id": "adornos-hogar-10",
+        "titulo": "Jarrón",
+        "imagen": "./img/adornos_hogar/10.jpg",
+        "categoria": {
+            "nombre": "Adornos del Hogar",
+            "id": "adornos-hogar"
+        },
+        "precio": 450
+    },
+    {
+        "id": "vestimenta-01",
+        "titulo": "Polo Blanco",
+        "imagen": "./img/vestimenta/01.jpg",
+        "categoria": {
+            "nombre": "Vestimenta",
+            "id": "vestimenta"
+        },
+        "precio": 1000
+    },
+    {
+        "id": "vestimenta-02",
+        "titulo": "Pantalón Jean",
+        "imagen": "./img/vestimenta/02.jpg",
+        "categoria": {
+            "nombre": "Vestimenta",
+            "id": "vestimenta"
+        },
+        "precio": 1000
+    },
+    {
+        "id": "vestimenta-03",
+        "titulo": "Falda Negra",
+        "imagen": "./img/vestimenta/03.jpg",
+        "categoria": {
+            "nombre": "Vestimenta",
+            "id": "vestimenta"
+        },
+        "precio": 1000
+    },
+    {
+        "id": "vestimenta-04",
+        "titulo": "Abrigo Largo",
+        "imagen": "./img/vestimenta/04.jpg",
+        "categoria": {
+            "nombre": "Vestimenta",
+            "id": "vestimenta"
+        },
+        "precio": 1000
+    },
+    {
+        "id": "vestimenta-05",
+        "titulo": "Chaleco",
+        "imagen": "./img/vestimenta/05.jpg",
+        "categoria": {
+            "nombre": "Vestimenta",
+            "id": "vestimenta"
+        },
+        "precio": 1000
+    },
+    {
+        "id": "vestimenta-06",
+        "titulo": "Camisa de Cuadros",
+        "imagen": "./img/vestimenta/06.jpg",
+        "categoria": {
+            "nombre": "Vestimenta",
+            "id": "vestimenta"
+        },
+        "precio": 1000
+    },
+    {
+        "id": "vestimenta-07",
+        "titulo": "Zapatos de Cuero",
+        "imagen": "./img/vestimenta/07.jpg",
+        "categoria": {
+            "nombre": "Vestimenta",
+            "id": "vestimenta"
+        },
+        "precio": 1000
+    },
+    {
+        "id": "vestimenta-08",
+        "titulo": "Sandalias",
+        "imagen": "./img/vestimenta/08.jpg",
+        "categoria": {
+            "nombre": "Vestimenta",
+            "id": "vestimenta"
+        },
+        "precio": 1000
+    },
+    {
+        "id": "vestimenta-09",
+        "titulo": "Sombrero",
+        "imagen": "./img/vestimenta/09.jpg",
+        "categoria": {
+            "nombre": "Vestimenta",
+            "id": "vestimenta"
+        },
+        "precio": 1000
+    },
+    {
+        "id": "vestimenta-10",
+        "titulo": "Cinturón",
+        "imagen": "./img/vestimenta/10.jpg",
+        "categoria": {
+            "nombre": "Vestimenta",
+            "id": "vestimenta"
+        },
+        "precio": 1000
+    },
+    {
+        "id": "aseo-limpieza-01",
+        "titulo": "Lejía",
+        "imagen": "./img/aseo_limpieza/01.jpg",
+        "categoria": {
+            "nombre": "Aseo y Limpieza",
+            "id": "aseo-limpieza"
+        },
+        "precio": 200
+    },
+    {
+        "id": "aseo-limpieza-02",
+        "titulo": "Escobilla de Baño",
+        "imagen": "./img/aseo_limpieza/02.jpg",
+        "categoria": {
+            "nombre": "Aseo y Limpieza",
+            "id": "aseo-limpieza"
+        },
+        "precio": 100
+    },
+    {
+        "id": "aseo-limpieza-03",
+        "titulo": "Jabón Líquido",
+        "imagen": "./img/aseo_limpieza/03.jpg",
+        "categoria": {
+            "nombre": "Aseo y Limpieza",
+            "id": "aseo-limpieza"
+        },
+        "precio": 150
+    },
+    {
+        "id": "aseo-limpieza-04",
+        "titulo": "Trapeador",
+        "imagen": "./img/aseo_limpieza/04.jpg",
+        "categoria": {
+            "nombre": "Aseo y Limpieza",
+            "id": "aseo-limpieza"
+        },
+        "precio": 300
+    },
+    {
+        "id": "aseo-limpieza-05",
+        "titulo": "Balde",
+        "imagen": "./img/aseo_limpieza/05.jpg",
+        "categoria": {
+            "nombre": "Aseo y Limpieza",
+            "id": "aseo-limpieza"
+        },
+        "precio": 250
+    },
+    {
+        "id": "aseo-limpieza-06",
+        "titulo": "Esponja",
+        "imagen": "./img/aseo_limpieza/06.jpg",
+        "categoria": {
+            "nombre": "Aseo y Limpieza",
+            "id": "aseo-limpieza"
+        },
+        "precio": 50
+    },
+    {
+        "id": "aseo-limpieza-07",
+        "titulo": "Detergente en Polvo",
+        "imagen": "./img/aseo_limpieza/07.jpg",
+        "categoria": {
+            "nombre": "Aseo y Limpieza",
+            "id": "aseo-limpieza"
+        },
+        "precio": 400
+    },
+    {
+        "id": "aseo-limpieza-08",
+        "titulo": "Limpiador Multiusos",
+        "imagen": "./img/aseo_limpieza/08.jpg",
+        "categoria": {
+            "nombre": "Aseo y Limpieza",
+            "id": "aseo-limpieza"
+        },
+        "precio": 350
+    },
+    {
+        "id": "aseo-limpieza-09",
+        "titulo": "Paño de Microfibra",
+        "imagen": "./img/aseo_limpieza/09.jpg",
+        "categoria": {
+            "nombre": "Aseo y Limpieza",
+            "id": "aseo-limpieza"
+        },
+        "precio": 120
+    },
+    {
+        "id": "aseo-limpieza-10",
+        "titulo": "Cepillo de Barrer",
+        "imagen": "./img/aseo_limpieza/10.jpg",
+        "categoria": {
+            "nombre": "Aseo y Limpieza",
+            "id": "aseo-limpieza"
+        },
+        "precio": 280
+    }
+]

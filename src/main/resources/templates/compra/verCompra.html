@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{_frag/base::site-head}"></head>
+<body>
+    <div class="wrapper">
+        <header th:replace="~{_frag/base::site-header}"></header>
+        <aside>
+            <div th:replace="~{_frag/base::site-menu}"></div>
+            <button id="usuarios" class="boton-menu boton"><i class="bi bi-person-square"></i><a th:href="@{/admin/index}" style="color: inherit; text-decoration: none;">Usuario</a></button>
+            <nav>
+                <ul class="menu">
+                    <li><button id="productos" class="boton-menu boton-categoria"><i class="bi bi-hand-index-thumb"></i><a th:href="@{/producto/index}" style="color: inherit; text-decoration: none;">Productos</a></button></li>
+                    <li><button id="clientes" class="boton-menu boton-categoria"><i class="bi bi-hand-index-thumb"></i><a th:href="@{/cliente/index}" style="color: inherit; text-decoration: none;">Clientes</a></button></li>
+                    <li><button id="proveedores" class="boton-menu boton-categoria"><i class="bi bi-hand-index-thumb"></i><a th:href="@{/proveedor/index}" style="color: inherit; text-decoration: none;">Proveedores</a></button></li>
+                    <li><button id="empleados" class="boton-menu boton-categoria"><i class="bi bi-hand-index-thumb"></i><a th:href="@{/empleado/index}" style="color: inherit; text-decoration: none;">Empleados</a></button></li>
+                    <li><button id="compras" class="boton-menu boton-categoria active"><i class="bi bi-hand-index-thumb-fill"></i><a th:href="@{/compra/index}" style="color: inherit; text-decoration: none;">Compras</a></button></li>
+                </ul>
+            </nav>
+            <div sec:authorize="isAuthenticated()">
+                <form th:action="@{/logout}" method="post" id="logoutForm">
+                    <p class="text-white align-middle m-0">
+                        <button id="usuarios" class="boton-menu boton"><i class="bi bi-door-closed-fill"></i> Cerrar Sesión</button>
+                    </p>
+                </form>
+            </div>
+            <footer th:replace="~{_frag/base::site-footer}"></footer>
+        </aside>
+        <main>
+            <h2 class="my-4 text-center">Detalles de la Compra</h2>
+            <div class="mb-3">
+                <label class="form-label">Proveedor:</label>
+                <span th:text="${compra.proveedor.razonSocial}"></span>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Empleado:</label>
+                <span th:text="${compra.empleado.nombres}"></span>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Fecha:</label>
+                <span th:text="${#dates.format(compra.fecha, 'yyyy-MM-dd HH:mm')}"></span>
+            </div>
+            <h3 class="my-4" >Productos</h3>
+            <table class="table table-success table-striped">
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Precio Unitario</th>
+                        <th>Cantidad</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="detalle : ${compra.compraDetalles}">
+                        <td th:text="${detalle.producto.nombre}">Producto</td>
+                        <td th:text="${detalle.precioUnitario}">Precio Unitario</td>
+                        <td th:text="${detalle.cantidad}">Cantidad</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="d-flex justify-content-between mt-4">
+                <a th:href="@{/compra/index}" class="btn btn-secondary" role="button">Regresar</a>
+            </div>
+        </main>
+    </div>
+    <div th:replace="~{_frag/base::site-scripts}"></div>
+</body>
+</html>

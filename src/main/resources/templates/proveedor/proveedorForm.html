@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{_frag/base::site-head}"></head>
+<body>
+    <div class="wrapper">
+        <header th:replace="~{_frag/base::site-header}"></header>
+        <aside>
+            <div th:replace="~{_frag/base::site-menu}"></div>
+            <button id="usuarios" class="boton-menu boton"><i class="bi bi-person-square"></i><a th:href="@{/admin/index}" style="color: inherit; text-decoration: none;">Usuario</a></button>
+            <nav>
+                <ul class="menu">
+                    <li>
+                        <button id="productos" class="boton-menu boton-categoria"><i class="bi bi-hand-index-thumb"></i><a th:href="@{/producto/index}" style="color: inherit; text-decoration: none;">Productos</a></button>
+                    </li>
+                    <li>
+                        <button id="clientes" class="boton-menu boton-categoria"><i class="bi bi-hand-index-thumb"></i><a th:href="@{/cliente/index}" style="color: inherit; text-decoration: none;">Clientes</a></button>
+                    </li>
+                    <li>
+                        <button id="proveedores" class="boton-menu boton-categoria active"><i class="bi bi-hand-index-thumb-fill"></i><a th:href="@{/proveedor/index}" style="color: inherit; text-decoration: none;">Proveedores</a></button>
+                    </li>
+                    <li>
+                        <button id="empleados" class="boton-menu boton-categoria"><i class="bi bi-hand-index-thumb"></i><a th:href="@{/empleado/index}" style="color: inherit; text-decoration: none;">Empleados</a></button>
+                    </li>
+                    <li>
+						<button id="compras" class="boton-menu boton-categoria"><i class="bi bi-hand-index-thumb"></i><a th:href="@{/compra/index}" style="color: inherit; text-decoration: none;">Compras</a></button>
+					</li> 
+                </ul>
+            </nav>
+            
+            <div sec:authorize="isAuthenticated()">
+				<form th:action="@{/logout}" method="post" id="logoutForm">
+					<p class="text-white align-middle m-0">
+						<button id="usuarios" class="boton-menu boton"><i class="bi bi-door-closed-fill"></i>
+							Cerrar Sesion	
+						</button>			
+					</p>		
+				</form>	
+			</div>
+            <footer th:replace="~{_frag/base::site-footer}"></footer>
+        </aside>
+        <main>
+                <h2 class="my-4 text-center">Datos del Proveedor</h2>
+                <form th:object="${proveedor}" th:action="@{/proveedor/guardar}" th:method="post">
+                    <div class="mb-3">
+                        <input type="hidden" id="inputID" th:field="*{id}" th:value="*{id}"/>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="inputRUC" class="form-label">RUC:</label>
+                        <input type="text" id="inputRUC" class="form-control" placeholder="Ingrese RUC"
+                            th:field="*{ruc}" th:value="*{ruc}"/>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="inputRazonSocial" class="form-label">Razón Social:</label>
+                        <input type="text" id="inputRazonSocial" class="form-control" placeholder="Ingrese Razón Social"
+                            th:field="*{razonSocial}" th:value="*{razonSocial}"/>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="inputTelefono" class="form-label">Teléfono:</label>
+                        <input type="text" id="inputTelefono" class="form-control" placeholder="Ingrese Teléfono"
+                            th:field="*{telefono}" th:value="*{telefono}"/>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="inputDireccion" class="form-label">Dirección:</label>
+                        <input type="text" id="inputDireccion" class="form-control" placeholder="Ingrese Dirección"
+                            th:field="*{direccion}" th:value="*{direccion}"/>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between">
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                        <a th:href="@{/proveedor/index}" class="btn btn-secondary" role="button">Cancelar</a>
+                    </div>
+                </form>
+        </main>
+    </div>
+    
+    <div th:replace="~{_frag/base::site-scripts}"></div>
+</body>
+</html>

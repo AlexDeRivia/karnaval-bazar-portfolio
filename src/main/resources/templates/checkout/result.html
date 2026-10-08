@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{_frag/base::site-head}"></head>
+<body class="checkout-page">
+    <main class="checkout-card">
+        <p class="demo-badge">Stripe en modo de prueba · sin cargo real</p>
+        <h1 th:text="${paid} ? 'Pago de prueba confirmado' : 'No se pudo confirmar el pago de prueba'">Resultado</h1>
+        <p>Este flujo no crea pedidos comerciales ni procesa pagos reales.</p>
+        <a class="btn btn-primary" th:href="@{/}">Volver al catálogo</a>
+    </main>
+    <script th:if="${paid}">localStorage.removeItem('productos-en-carrito');</script>
+</body>
+</html>

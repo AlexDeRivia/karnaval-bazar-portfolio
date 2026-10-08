@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{_frag/base::site-head}"></head>
+<body>
+    <div class="wrapper">
+        <header th:replace="~{_frag/base::site-header}"></header>
+        <aside>
+            <div th:replace="~{_frag/base::site-menu}"></div>
+                <button id="usuarios" class="boton-menu boton"><i class="bi bi-person-square"></i><a th:href="@{/admin/index}" style="color: inherit; text-decoration: none;">Usuario</a></button>
+            <nav>
+                <ul class="menu">
+                    <li>
+                        <button id="productos" class="boton-menu boton-categoria"><i class="bi bi-hand-index-thumb"></i><a th:href="@{/producto/index}" style="color: inherit; text-decoration: none;">Productos</a></button>
+                    </li>
+                    <li>
+                        <button id="clientes" class="boton-menu boton-categoria"><i class="bi bi-hand-index-thumb"></i><a th:href="@{/cliente/index}" style="color: inherit; text-decoration: none;">Clientes</a></button>
+                    </li>
+                    <li>
+                        <button id="proveedores" class="boton-menu boton-categoria"><i class="bi bi-hand-index-thumb"></i><a th:href="@{/proveedor/index}" style="color: inherit; text-decoration: none;">Proveedores</a></button>
+                    </li>
+                    <li>
+                        <button id="empleados" class="boton-menu boton-categoria active"><i class="bi bi-hand-index-thumb-fill"></i><a th:href="@{/empleado/index}" style="color: inherit; text-decoration: none;">Empleados</a></button>
+                    </li>
+                    <li>
+						<button id="compras" class="boton-menu boton-categoria"><i class="bi bi-hand-index-thumb"></i><a th:href="@{/compra/index}" style="color: inherit; text-decoration: none;">Compras</a></button>
+					</li> 
+                </ul>
+            </nav>
+            
+            <div sec:authorize="isAuthenticated()">
+				<form th:action="@{/logout}" method="post" id="logoutForm">
+					<p class="text-white align-middle m-0">
+						<button id="usuarios" class="boton-menu boton"><i class="bi bi-door-closed-fill"></i>
+							Cerrar Sesion	
+						</button>			
+					</p>		
+				</form>	
+			</div>
+            <footer th:replace="~{_frag/base::site-footer}"></footer>
+        </aside>
+        <main>
+            <h2 class="titulo-principal" id="titulo-principal">Lista de Empleados</h2>
+
+            <div class="button-group" style="margin-bottom: 20px;">
+                <button type="button" class="btn btn-secondary bi bi-plus-square" onclick="location.href='/empleado/nuevo'">   Agregar Empleado</button>
+                <button type="button" class="btn btn-danger bi bi-x-square" onclick="location.href='/'">   Cerrar</button>
+            </div>
+
+            <table id="listadoEmpleado" class="table table-success table-striped">
+                <thead>
+                    <tr>
+                        <th>DNI</th>
+                        <th>Apellido Paterno</th>
+                        <th>Apellido Materno</th>
+                        <th>Nombres</th>
+                        <th>Fecha de Nacimiento</th>
+                        <th>Celular</th>
+                        <th>eMail</th>
+                        <th>Dirección</th>
+                        <th>Editar</th>
+                        <th>Eliminar</th>
+                    </tr>
+                </thead>
+                <tbody class="table-group-divider">
+                    <tr th:each="empleado : ${listaEmpleados}">
+                        <td th:text="${empleado.dni}">DNI</td>
+                        <td th:text="${empleado.apellidoPaterno}">Apellido Paterno</td>
+                        <td th:text="${empleado.apellidoMaterno}">Apellido Materno</td>
+                        <td th:text="${empleado.nombres}">Nombres</td>
+                        <td th:text="${#dates.format(empleado.fechaNacimiento, 'yyyy-MM-dd')}">Fecha de Nacimiento</td>
+                        <td th:text="${empleado.celular}">Celular</td>
+                        <td th:text="${empleado.eMail}">eMail</td>
+                        <td th:text="${empleado.direccion}">Dirección</td>
+                        <td>
+                            <button type="button" class="btn btn-success">
+                                <a th:href="@{/empleado/editar/{id}(id=${empleado.id})}" style="color: inherit; text-decoration: none;"><i class="bi bi-pencil-square"></i></a>
+                            </button>
+                        </td>
+                        <td>
+                            <form th:action="@{/empleado/eliminar/{id}(id=${empleado.id})}" method="post" onsubmit="return confirm('¿Eliminar empleado?')">
+                                <button type="submit" class="btn btn-warning" aria-label="Eliminar empleado"><i class="bi bi-trash3"></i></button>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </main>
+    </div>
+    
+    <div th:replace="~{_frag/base::site-scripts}"></div>
+</body>
+</html>

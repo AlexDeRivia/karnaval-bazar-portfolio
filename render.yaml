@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: sistema-comercial-bazar
+    runtime: docker
+    plan: free
+    healthCheckPath: /
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: demo

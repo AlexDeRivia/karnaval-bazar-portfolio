@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang = "es">
+	<head th:replace="~{_frag/base::site-head}"></head>
+	<body>
+		<header th:replace="~{_frag/base::site-header}"></header>
+		<article class="container-md mt-3 col-4 bg-light p-5 rounded">
+			<h2 class="text-center">Acceso de Usuario</h2>
+			<div th:if="${param.error}" class="text-center" style="color: red; font-weight: bold; margin: 10px 0px;">
+				<small>Usuario o Password Invalido</small>
+			</div>
+			
+			<form name='login' th:action="@{/login}" method='POST'>
+				<div class="form-group mb-3">
+					<label for="inputUsernname" class="form-label">Usuario: </label>
+					<input type="text" id="inputUsername" placeholder="Nombre de Usuario" name="username" value="" class="form-control">
+				</div>
+				
+				<div class="form-group mb-3">
+					<label for="inputPassword" class="form-label">Clave: </label>
+					<input type="password" id="inputPassword" placeholder="Clave de Usuario" name="password" value="" class="form-control">
+				</div>
+				
+				<div>
+					<button type="submit" class="btn btn-outline-primary">Ingresar</button>
+				</div>
+			</form>
+		</article>
+	</body>
+</html>

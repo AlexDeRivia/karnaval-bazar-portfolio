@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head th:replace="~{_frag/base::site-head}"></head>
+<body>
+
+    <div class="wrapper">
+        <header th:replace="~{_frag/base::site-header}"></header>
+        <aside>
+            <div th:replace="~{_frag/base::site-menu}"></div>
+            <nav>
+                <ul>
+                    <li>
+                        <a class="boton-menu boton-volver" th:href="@{/}">
+                            <i class="bi bi-arrow-return-left"></i> Seguir comprando
+                        </a>
+                    </li>
+                    <li>
+                        <a class="boton-menu boton-carrito active" th:href="@{/shoopingCar/openCar}">
+                            <i class="bi bi-cart-fill"></i> Carrito
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <footer th:replace="~{_frag/base::site-footer}"></footer>
+        </aside>
+        <main>
+            <h2 class="titulo-principal">Carrito</h2>
+            <div class="contenedor-carrito">
+                <p id="carrito-vacio" class="carrito-vacio">Tu carrito está vacío. <i class="bi bi-emoji-frown"></i></p>
+
+                <div id="carrito-productos" class="carrito-productos disabled">
+                    <!-- Esto se va a completar con el JS -->
+                </div>
+
+                <div id="carrito-acciones" class="carrito-acciones disabled">
+                    <div class="carrito-acciones-izquierda">
+                        <button id="carrito-acciones-vaciar" class="carrito-acciones-vaciar">Vaciar carrito</button>
+                    </div>
+                    <div class="carrito-acciones-derecha">
+                        <div class="carrito-acciones-total">
+                            <p>Total:</p>
+                            <p id="total">S/ 0.00</p>
+                        </div>
+                        <form id="checkout-form" th:if="${checkoutEnabled}" th:action="@{/checkout}" method="post">
+                            <button id="carrito-acciones-comprar" class="carrito-acciones-comprar" type="submit">Continuar</button>
+                        </form>
+                        <p th:unless="${checkoutEnabled}">Checkout no disponible</p>
+                    </div>
+                </div>
+                <p class="demo-notice">Entorno de prueba: no se realizan cargos reales.</p>
+
+            </div>
+        </main>
+    </div>
+    
+	<div th:replace="~{_frag/base::site-scripts}"></div>
+	<script th:src="@{/js/carrito.js}" type="module"></script>
+</body>
+</html>

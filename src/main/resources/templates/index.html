@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head th:replace="~{_frag/base::site-head}"></head>
+<body>
+    <div class="wrapper">
+        <header th:replace="~{_frag/base::site-header}"></header>
+        <aside>
+            <div th:replace="~{_frag/base::site-menu}"></div>
+            <nav>
+                <ul class="menu">
+                    <li>
+                        <button id="todos" class="boton-menu boton-categoria active"><i class="bi bi-hand-index-thumb-fill"></i> Todos los productos</button>
+                    </li>
+                    <li>
+                        <button id="tecnologia" class="boton-menu boton-categoria"><i class="bi bi-hand-index-thumb"></i>Tecnología</button>
+                    </li>
+                    <li>
+                        <button id="accesorios-mujer" class="boton-menu boton-categoria"><i class="bi bi-hand-index-thumb"></i>Accesorios para Mujeres</button>
+                    </li>
+                    <li>
+                        <button id="adornos-hogar" class="boton-menu boton-categoria"><i class="bi bi-hand-index-thumb"></i>Adornos del Hogar</button>
+                    </li>
+					<li>
+						<button id="vestimenta" class="boton-menu boton-categoria"><i class="bi bi-hand-index-thumb"></i>Vestimenta</button>
+					</li>
+					<li>
+						<button id="aseo-limpieza" class="boton-menu boton-categoria"><i class="bi bi-hand-index-thumb"></i>Aseo y Limpieza</button>
+					</li>
+                    <li>
+                        <a class="boton-menu boton-carrito" th:href="@{/shoopingCar/openCar}">
+                            <i class="bi bi-cart-fill"></i> Carrito <span id="numerito" class="numerito">0</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <footer th:replace="~{_frag/base::site-footer}"></footer>
+        </aside>
+        <main>
+            <h2 class="titulo-principal" id="titulo-principal">Todos los productos</h2>
+			<p class="demo-notice">Catálogo de prueba · datos ficticios y sin cobros reales</p>
+			
+			<section class="contenedor-productos" id="contenedor-productos"></section>
+			
+            <template id="section-productos" class="section-productos">
+                <!-- Esto se va a rellenar con JS -->
+				<figure class="producto">
+				    <img class="producto-imagen">
+				    <figcaption class="producto-detalles">
+						<h3 class="producto-titulo"></h3>
+						<p class="producto-precio"></p>
+						<button class="producto-agregar" id="">Agregar</button>
+					</figcaption>
+				</figure>
+            </template>
+        </main>
+    </div>
+    
+	<div th:replace="~{_frag/base::site-scripts}"></div>
+    <script th:src="@{/js/main.js}" type ="module"></script>
+	
+</body>
+</html>

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{_frag/base::site-head}"></head>
+<body>
+    <div class="wrapper">
+        <header th:replace="~{_frag/base::site-header}"></header>
+        <aside>
+            <div th:replace="~{_frag/base::site-menu}"></div>
+                <button id="usuarios" class="boton-menu boton"><i class="bi bi-person-square"></i><a th:href="@{/admin/index}" style="color: inherit; text-decoration: none;">Usuario</a></button>
+            <nav>
+                <ul class="menu">
+                    <li>
+                        <button id="productos" class="boton-menu boton-categoria active"><i class="bi bi-hand-index-thumb-fill"></i><a th:href="@{/producto/index}" style="color: inherit; text-decoration: none;">Productos</a></button>
+                    </li>
+                    <li>
+                        <button id="clientes" class="boton-menu boton-categoria"><i class="bi bi-hand-index-thumb"></i><a th:href="@{/cliente/index}" style="color: inherit; text-decoration: none;">Clientes</a></button>
+                    </li>
+                    <li>
+                        <button id="proveedores" class="boton-menu boton-categoria"><i class="bi bi-hand-index-thumb"></i><a th:href="@{/proveedor/index}" style="color: inherit; text-decoration: none;">Proveedores</a></button>
+                    </li>
+					<li>
+						<button id="empleados" class="boton-menu boton-categoria"><i class="bi bi-hand-index-thumb"></i><a th:href="@{/empleado/index}" style="color: inherit; text-decoration: none;">Empleados</a></button>
+					</li> 
+					<li>
+						<button id="compras" class="boton-menu boton-categoria"><i class="bi bi-hand-index-thumb"></i><a th:href="@{/compra/index}" style="color: inherit; text-decoration: none;">Compras</a></button>
+					</li> 
+                </ul>
+            </nav>
+            
+            <div sec:authorize="isAuthenticated()">
+				<form th:action="@{/logout}" method="post" id="logoutForm">
+					<p class="text-white align-middle m-0">
+						<button id="usuarios" class="boton-menu boton"><i class="bi bi-door-closed-fill"></i>
+							Cerrar Sesion	
+						</button>			
+					</p>		
+				</form>	
+			</div>
+            <footer th:replace="~{_frag/base::site-footer}"></footer>
+        </aside>
+        <main>
+                <h2 class="my-4 text-center">Datos del Producto</h2>
+                <form th:object="${producto}" th:action="@{/producto/guardar}" th:method="post">
+                    <div class="mb-3">
+                        <input type="hidden" id="inputID" th:field="*{id}" th:value="*{id}"/>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="inputNombre" class="form-label">Nombre:</label>
+                        <input type="text" id="inputNombre" class="form-control" placeholder="Ingrese Nombre"
+                            th:field="*{nombre}" th:value="*{nombre}"/>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="inputPrecio" class="form-label">Precio:</label>
+                        <input type="number" step="0.01" id="inputPrecio" class="form-control" placeholder="Ingrese Precio"
+                            th:field="*{precio}" th:value="*{precio}"/>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="inputStock" class="form-label">Stock:</label>
+                        <input type="number" id="inputStock" class="form-control" placeholder="Ingrese Stock"
+                            th:field="*{stock}" th:value="*{stock}"/>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="inputCategoria" class="form-label">Categoría:</label>
+                        <select id="inputCategoria" class="form-select" th:field="*{categoria}" required>
+                            <option value="tecnologia">Tecnología</option>
+                            <option value="accesorios-mujer">Accesorios para mujeres</option>
+                            <option value="adornos-hogar">Adornos del hogar</option>
+                            <option value="vestimenta">Vestimenta</option>
+                            <option value="aseo-limpieza">Aseo y limpieza</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="inputDescripcion" class="form-label">Descripción:</label>
+                        <textarea id="inputDescripcion" class="form-control" placeholder="Ingrese Descripción"
+                            th:field="*{descripcion}" th:value="*{descripcion}"></textarea>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="inputUbicacionAlmacen" class="form-label">Ubicación en Almacén:</label>
+                        <input type="text" id="inputUbicacionAlmacen" class="form-control" placeholder="Ingrese Ubicación en Almacén"
+                            th:field="*{ubicacionAlmacen}" th:value="*{ubicacionAlmacen}"/>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="inputFoto" class="form-label">Foto URL:</label>
+                        <input type="text" id="inputFoto" class="form-control" placeholder="Ingrese URL de la Foto"
+                            th:field="*{foto}" th:value="*{foto}"/>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between">
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                        <a th:href="@{/producto/index}" class="btn btn-secondary" role="button">Cancelar</a>
+                    </div>
+                </form>
+        </main>
+    </div>
+    
+	<div th:replace="~{_frag/base::site-scripts}"></div>
+</body>
+</html>

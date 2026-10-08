@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{_frag/base::site-head}"></head>
+<body>
+    <div class="wrapper">
+        <header th:replace="~{_frag/base::site-header}"></header>
+        <aside>
+            <div th:replace="~{_frag/base::site-menu}"></div>
+            <button id="usuarios" class="boton-menu boton"><i class="bi bi-person-square"></i><a th:href="@{/admin/index}" style="color: inherit; text-decoration: none;">Usuario</a></button>
+            <nav>
+                <ul class="menu">
+                    <li><button id="productos" class="boton-menu boton-categoria"><i class="bi bi-hand-index-thumb"></i><a th:href="@{/producto/index}" style="color: inherit; text-decoration: none;">Productos</a></button></li>
+                    <li><button id="clientes" class="boton-menu boton-categoria"><i class="bi bi-hand-index-thumb"></i><a th:href="@{/cliente/index}" style="color: inherit; text-decoration: none;">Clientes</a></button></li>
+                    <li><button id="proveedores" class="boton-menu boton-categoria"><i class="bi bi-hand-index-thumb"></i><a th:href="@{/proveedor/index}" style="color: inherit; text-decoration: none;">Proveedores</a></button></li>
+                    <li><button id="empleados" class="boton-menu boton-categoria"><i class="bi bi-hand-index-thumb"></i><a th:href="@{/empleado/index}" style="color: inherit; text-decoration: none;">Empleados</a></button></li>
+                    <li><button id="compras" class="boton-menu boton-categoria active"><i class="bi bi-hand-index-thumb-fill"></i><a th:href="@{/compra/index}" style="color: inherit; text-decoration: none;">Compras</a></button></li>
+                </ul>
+            </nav>
+            <div sec:authorize="isAuthenticated()">
+                <form th:action="@{/logout}" method="post" id="logoutForm">
+                    <p class="text-white align-middle m-0">
+                        <button id="usuarios" class="boton-menu boton"><i class="bi bi-door-closed-fill"></i> Cerrar Sesión</button>
+                    </p>
+                </form>
+            </div>
+            <footer th:replace="~{_frag/base::site-footer}"></footer>
+        </aside>
+        <main>
+            <h2 class="my-4 text-center">Datos de la Compra</h2>
+            <form id="compra-form" th:object="${compra}" th:action="@{/compra/guardar}" th:method="post">
+                <p th:if="${#fields.hasErrors()}" class="alert alert-danger">Revisa los datos de la compra y agrega al menos un producto.</p>
+                <div class="mb-3">
+                    <input type="hidden" id="inputID" th:field="*{id}" th:value="*{id}"/>
+                </div>
+                <div class="mb-3">
+                    <label for="inputProveedor" class="form-label">Proveedor:</label>
+                    <select id="inputProveedor" class="form-select" th:field="*{proveedor.id}">
+                        <option th:each="proveedor : ${proveedores}" th:value="${proveedor.id}" th:text="${proveedor.razonSocial}">Proveedor</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="inputEmpleado" class="form-label">Empleado:</label>
+                    <select id="inputEmpleado" class="form-select" th:field="*{empleado.id}">
+                        <option th:each="empleado : ${empleados}" th:value="${empleado.id}" th:text="${empleado.nombres}">Empleado</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="inputFecha" class="form-label">Fecha:</label>
+                    <input type="date" id="inputFecha" class="form-control" th:field="*{fecha}" th:value="*{fecha}"/>
+                </div>
+                <h2 class="my-4" >Detalle de Compra</h2>
+                <div id="detallesContainer">
+                    <div class="detalle-compra" th:id="|detalle-${iterStat.index}|" th:each="detalle, iterStat : ${compra.compraDetalles}">
+                        <div class="mb-3">
+                            <label for="inputProducto" class="form-label">Producto:</label>
+                            <select id="inputProducto" class="form-select" th:field="*{compraDetalles[__${iterStat.index}__].producto.id}">
+                                <option th:each="producto : ${productos}" th:value="${producto.id}" th:text="${producto.nombre}">Producto</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="inputCantidad" class="form-label">Cantidad:</label>
+                            <input type="number" id="inputCantidad" class="form-control" th:field="*{compraDetalles[__${iterStat.index}__].cantidad}" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="inputPrecioUnitario" class="form-label">Precio Unitario:</label>
+                            <input type="number" id="inputPrecioUnitario" class="form-control" step="0.01" th:field="*{compraDetalles[__${iterStat.index}__].precioUnitario}" />
+                        </div>
+                        <div class="mb-3">
+			                <button type="button" class="btn btn-danger bi bi-x-circle"
+					            th:onclick="'removeDetalle(' + ${iterStat.index} + ')'">
+					            Quitar Detalle
+					        </button>
+		                </div>
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <button type="button" class="btn btn-success bi bi-plus-circle" onclick="addDetalle()">   Agregar Detalle</button>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                    <a th:href="@{/compra/index}" class="btn btn-secondary" role="button">Cancelar</a>
+                </div>
+            </form>
+        </main>
+    </div>
+    <div th:replace="~{_frag/base::site-scripts}"></div>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        const productos = /*[[${productos}]]*/ [];
+
+        let nextIndex = Math.max(-1, ...Array.from(document.querySelectorAll('.detalle-compra'))
+            .map(element => Number(element.id.replace('detalle-', '')))) + 1;
+
+        function addDetalle() {
+            const detallesContainer = document.getElementById('detallesContainer');
+            const index = nextIndex++;
+
+            const detalleHtml = `
+                <div class="detalle-compra" id="detalle-${index}">
+                    <div class="mb-3">
+                        <label for="inputProducto" class="form-label">Producto:</label>
+                        <select id="inputProducto" class="form-select" name="compraDetalles[${index}].producto.id" required>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="inputCantidad" class="form-label">Cantidad:</label>
+                        <input type="number" id="inputCantidad" class="form-control" name="compraDetalles[${index}].cantidad" required />
+                    </div>
+                    <div class="mb-3">
+                        <label for="inputPrecioUnitario" class="form-label">Precio Unitario:</label>
+                        <input type="number" id="inputPrecioUnitario" class="form-control" step="0.01" name="compraDetalles[${index}].precioUnitario" required />
+                    </div>
+                    <div class="mb-3">
+                    <button type="button" class="btn btn-danger bi bi-x-circle" onclick="removeDetalle(${index})">   Quitar Detalle</button>
+                    </div>
+                </div>
+            `;
+
+            detallesContainer.insertAdjacentHTML('beforeend', detalleHtml);
+            const selector = document.querySelector(`#detalle-${index} select`);
+            for (const producto of productos) {
+                const option = document.createElement('option');
+                option.value = producto.id;
+                option.textContent = producto.nombre;
+                selector.appendChild(option);
+            }
+        }
+
+        function removeDetalle(index) {
+            const detalle = document.getElementById(`detalle-${index}`);
+            if (detalle) {
+                detalle.remove();
+            }
+        }
+
+        document.querySelector('#compra-form').addEventListener('submit', () => {
+            document.querySelectorAll('.detalle-compra').forEach((detalle, index) => {
+                detalle.querySelectorAll('[name]').forEach(field => {
+                    field.name = field.name.replace(/compraDetalles\[\d+\]/, `compraDetalles[${index}]`);
+                });
+            });
+        });
+        /*]]>*/
+    </script>
+
+</body>
+</html>
