@@ -6,4 +6,18 @@ services:
     healthCheckPath: /
     envVars:
       - key: SPRING_PROFILES_ACTIVE
-        value: demo
+        value: prod
+      - key: CHECKOUT_MODE
+        value: stripe-test
+      - key: APP_SEED_CATALOG
+        value: "true"
+      - key: JDBC_DATABASE_URL
+        sync: false
+      - key: DB_USERNAME
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
+      - key: STRIPE_SECRET_KEY
+        sync: false
+      - key: STRIPE_PUBLISHABLE_KEY
+        sync: false

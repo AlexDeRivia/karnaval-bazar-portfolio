@@ -10,6 +10,6 @@ RUN groupadd --system app && useradd --system --gid app app
 WORKDIR /app
 COPY --from=build --chown=app:app /workspace/target/KarnavalBazaar-0.0.1-SNAPSHOT.jar /app/app.jar
 USER app
-ENV JAVA_TOOL_OPTIONS="-XX:MaxRAMPercentage=65.0 -XX:+ExitOnOutOfMemoryError"
+ENV JAVA_TOOL_OPTIONS="-XX:MaxRAMPercentage=65.0 -XX:+ExitOnOutOfMemoryError -Dpdfbox.fontcache=/tmp"
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "/app/app.jar"]

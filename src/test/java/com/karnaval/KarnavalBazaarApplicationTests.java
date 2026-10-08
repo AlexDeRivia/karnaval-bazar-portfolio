@@ -38,7 +38,7 @@ class KarnavalBazaarApplicationTests {
                 .andExpect(content().string(org.hamcrest.Matchers.containsString("Catálogo de prueba")));
         mvc.perform(get("/shoopingCar/openCar"))
                 .andExpect(status().isOk())
-                .andExpect(content().string(org.hamcrest.Matchers.containsString("checkout-form")));
+                .andExpect(content().string(org.hamcrest.Matchers.containsString("Checkout no disponible")));
         mvc.perform(get("/api/catalog"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(50)))
@@ -46,16 +46,12 @@ class KarnavalBazaarApplicationTests {
     }
 
     @Test
-    void publicCheckoutIsClearlySimulatedAndRequiresCsrf() throws Exception {
+    void checkoutRequiresConfigurationAndCsrf() throws Exception {
         String item = productos.findAll().get(0).getId() + ":2";
         mvc.perform(post("/checkout").param("item", item))
                 .andExpect(status().isForbidden());
         mvc.perform(post("/checkout").with(csrf()).param("item", item))
-                .andExpect(status().isOk())
-                .andExpect(view().name("checkout/demo"))
-                .andExpect(content().string(org.hamcrest.Matchers.containsString("ningún pago realizado")));
-        mvc.perform(post("/checkout").with(csrf()).param("item", "999999:1"))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isServiceUnavailable());
     }
 
     @Test

@@ -1,21 +1,25 @@
 package com.karnaval.controlador;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+
+import com.karnaval.configuracion.StripeSettings;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 
 @Controller
 @RequestMapping(path = "/shoopingCar")
 public class ShoopingCarController {
-	@Value("${app.checkout.mode:disabled}")
-	private String checkoutMode;
+	private final StripeSettings stripeSettings;
+
+	public ShoopingCarController(StripeSettings stripeSettings) {
+		this.stripeSettings = stripeSettings;
+	}
 	
 	@GetMapping("/openCar")
 	public String showShoopingCarView(Model model) {
-		model.addAttribute("checkoutEnabled", !"disabled".equals(checkoutMode));
+		model.addAttribute("checkoutEnabled", stripeSettings.ready());
 		return "shoopingCar/shoopingCarView";
 	}
 }

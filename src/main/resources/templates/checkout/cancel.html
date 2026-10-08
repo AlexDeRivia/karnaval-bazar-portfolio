@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{_frag/base::site-head}"></head>
+<body class="checkout-page">
+    <main class="checkout-card">
+        <h1>Pago interrumpido</h1>
+        <p>No se confirmó el pedido. Tus productos siguen en el carrito para que puedas intentarlo de nuevo.</p>
+        <a class="btn btn-primary" th:href="@{/shoopingCar/openCar}">Volver al carrito</a>
+    </main>
+</body>
+</html>

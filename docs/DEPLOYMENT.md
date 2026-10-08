@@ -1,28 +1,24 @@
 # Despliegue y alojamiento
 
-## Opción inicial: Render Free
+## Requisitos del flujo de compra
 
-**Render Web Service Free con Docker y perfil `demo`.** Requiere un único servicio y no necesita una base de datos gestionada. Dentro de los límites del plan gratuito, el servicio no tiene cuota de alojamiento. El archivo `render.yaml` contiene esta configuración. El servicio puede tardar en responder después de un periodo de inactividad y los cambios en H2 se pierden al reiniciar el proceso.
+Los pedidos se guardan antes de enviar al comprador a Stripe y se confirman mediante un webhook firmado. El servicio público necesita una base PostgreSQL **persistente**: H2 en memoria perdería los pedidos al reiniciar y ya no podría asociar la notificación de Stripe con el pedido. El perfil `prod` usa `JDBC_DATABASE_URL`, `DB_USERNAME` y `DB_PASSWORD`.
 
-Antes de publicar, revisa también el permiso de uso de las fotografías incluidas en `src/main/resources/static/img`; el repositorio no documenta su procedencia.
+El archivo `render.yaml` prepara un servicio web Docker en Render con `SPRING_PROFILES_ACTIVE=prod`, `CHECKOUT_MODE=stripe-test` y `APP_SEED_CATALOG=true`. El catálogo inicial se carga solo si todavía no hay productos. Las credenciales se introducen como secretos; Render proporciona la URL pública mediante `RENDER_EXTERNAL_URL`.
 
-Pasos de despliegue:
+## Pasos en Render
 
-1. Verifica que tienes permiso para publicar las imágenes del catálogo. No incluyas credenciales ni claves de servicios externos en Git.
-2. Conecta el repositorio de GitHub con Render y asegúrate de que la integración tenga acceso a él.
-3. En Render, selecciona **New → Blueprint**, el repositorio y la rama `main`. Revisa el servicio definido en `render.yaml`: Docker, plan Free y `SPRING_PROFILES_ACTIVE=demo`.
-4. Despliega el Blueprint y comprueba `/`, `/api/catalog`, el carrito, el resumen sin cobro y la redirección del panel al login.
+1. Verifica el permiso de uso de las imágenes del catálogo; el repositorio no documenta su procedencia.
+2. Crea una base PostgreSQL persistente. Puede ser Render Postgres de pago o un proveedor externo compatible; la base gratuita de Render expira después de 30 días y no sirve como almacenamiento duradero.
+3. En Render, conecta el repositorio y selecciona **New → Blueprint**, rama `main`. Completa `JDBC_DATABASE_URL` con una URL JDBC (`jdbc:postgresql://host:5432/base`), `DB_USERNAME` y `DB_PASSWORD`.
+4. Durante la creación del Blueprint, configura `STRIPE_SECRET_KEY` (`sk_test_`) y `STRIPE_PUBLISHABLE_KEY` (`pk_test_`) de **tu propia cuenta** Stripe. Espera a que Render asigne la URL HTTPS del servicio. Si usas un dominio propio, define `PUBLIC_BASE_URL` manualmente con ese origen, sin barra final.
+5. En el Dashboard de Stripe, registra `https://TU_DOMINIO/stripe/webhook` como endpoint de prueba. Selecciona `checkout.session.completed`; para posibles métodos de pago asíncronos, añade `checkout.session.async_payment_succeeded` y `checkout.session.async_payment_failed`. Copia el secreto `whsec_` de **ese endpoint** a `STRIPE_WEBHOOK_SECRET` en Render y despliega de nuevo. El botón de compra aparecerá cuando estén configuradas todas las variables.
+6. Abre el catálogo, agrega un producto y termina una compra con la tarjeta `4242 4242 4242 4242`, una fecha futura y cualquier CVC de tres dígitos. Comprueba el evento en Stripe, la confirmación del pedido y la descarga del PDF. Prueba también un pago rechazado y verifica que no se genere comprobante.
 
-## Alternativas
+Stripe Checkout aloja el formulario de tarjeta. El código solo acepta claves de prueba; el PDF generado es ficticio y no es una factura tributaria. Si Stripe no permite abrir una cuenta para tu país o entidad, el flujo de prueba puede requerir una cuenta elegible y el cobro real necesitará otro proveedor admitido. No actives claves de modo activo con este código.
 
-| Opción | Cuándo elegirla | Coste y límites |
-| --- | --- | --- |
-| Render Free + H2 | Entorno público con datos de prueba | Sin base de datos contratada; arranque lento tras inactividad y datos efímeros. |
-| Railway Free/Hobby | Si prefieres más control o una futura base de datos | Crédito gratuito pequeño; Hobby tiene cuota mensual y el consumo puede aumentar el costo. |
-| Render con PostgreSQL gestionado | Si necesitas conservar datos | Requiere plan de pago para una base duradera; el PostgreSQL gratuito expira. |
+## Costes y límites
 
-## Cobros reales
+Stripe permite probar la integración sin mover dinero; los pagos reales tienen comisiones por transacción. Un servicio web Free de Render puede suspenderse tras 15 minutos sin tráfico y tardar aproximadamente un minuto en reactivarse. Render Postgres Free expira a los 30 días. Para conservar los pedidos y dar una experiencia estable, elige una base persistente y valora un servicio web sin suspensión. Consulta las condiciones vigentes antes de contratar.
 
-Stripe no requiere una cuota para integrar o probar Checkout. Los pagos reales conllevan una comisión por transacción según el país y medio de pago. A octubre de 2026, Perú no figura en la lista de países donde Stripe permite abrir una cuenta para aceptar pagos. Para un negocio peruano hace falta evaluar un proveedor admitido y sus tarifas. No actives cobros reales con este código: se requieren webhook verificado, pedidos persistidos y reglas de inventario, además de una cuenta y una entidad elegibles.
-
-Fuentes para comprobar condiciones antes de contratar: [países admitidos por Stripe](https://stripe.com/global), [tarifas de Stripe](https://stripe.com/pricing), [límites gratuitos de Render](https://render.com/docs/free) y [planes de Railway](https://docs.railway.com/pricing/plans).
+Fuentes: [pruebas de Stripe](https://docs.stripe.com/testing), [países admitidos por Stripe](https://stripe.com/global), [tarifas de Stripe](https://stripe.com/pricing) y [límites gratuitos de Render](https://render.com/docs/free).

@@ -2,12 +2,13 @@
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{_frag/base::site-head}"></head>
 <body class="checkout-page">
-    <main class="checkout-card">
-        <p class="demo-badge">Stripe en modo de prueba · sin cargo real</p>
-        <h1 th:text="${paid} ? 'Pago de prueba confirmado' : 'No se pudo confirmar el pago de prueba'">Resultado</h1>
-        <p>Este flujo no crea pedidos comerciales ni procesa pagos reales.</p>
-        <a class="btn btn-primary" th:href="@{/}">Volver al catálogo</a>
+    <main class="checkout-card" id="order-result" th:attr="data-order-id=${order.id},data-order-status=${order.status}">
+        <h1 id="order-title" th:text="${order.status.name() == 'PAID'} ? 'Compra confirmada' : 'Estamos confirmando tu pago'">Resultado de compra</h1>
+        <p id="order-message" th:text="${order.status.name() == 'PAID'} ? 'Tu pedido fue confirmado. Puedes descargar tu comprobante.' : 'Recibimos tu regreso de Stripe. El pedido se confirmará cuando llegue la notificación de pago.'">Estado del pedido</p>
+        <p>Pedido <strong th:text="${order.id}">ID</strong></p>
+        <a id="invoice-link" class="btn btn-primary" th:classappend="${order.status.name() == 'PAID'} ? '' : ' d-none'" th:href="@{/checkout/invoice/{id}(id=${order.id})}">Descargar factura de muestra</a>
+        <a class="btn btn-outline-secondary" th:href="@{/}">Volver al catálogo</a>
     </main>
-    <script th:if="${paid}">localStorage.removeItem('productos-en-carrito');</script>
+    <script th:src="@{/js/order-result.js}" type="module"></script>
 </body>
 </html>

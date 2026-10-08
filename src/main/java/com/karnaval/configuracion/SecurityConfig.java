@@ -30,10 +30,11 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
+                .csrf(csrf -> csrf.ignoringRequestMatchers("/stripe/webhook"))
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/", "/index", "/shoopingCar/openCar",
                                 "/message-responses/**", "/css/**", "/js/**", "/img/**",
-                                "/favicon.ico", "/api/catalog", "/checkout/**",
+                                "/favicon.ico", "/api/catalog", "/checkout/**", "/stripe/webhook",
                                 "/admin/login", "/admin/denegado").permitAll()
                         .requestMatchers("/admin/**", "/cliente/**", "/empleado/**",
                                 "/producto/**", "/proveedor/**", "/compra/**").hasRole("ADMIN")
