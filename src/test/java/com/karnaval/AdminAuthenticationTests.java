@@ -32,9 +32,13 @@ class AdminAuthenticationTests {
                 .andExpect(authenticated().withRoles("ADMIN"))
                 .andReturn();
         MockHttpSession session = (MockHttpSession) login.getRequest().getSession(false);
-        mvc.perform(get("/producto/index").session(session))
-                .andExpect(status().isOk());
-        mvc.perform(get("/admin/pedidos").session(session))
-                .andExpect(status().isOk());
+        for (String path : new String[] {
+                "/admin/index", "/admin/pedidos", "/producto/index", "/producto/nuevo",
+                "/cliente/index", "/cliente/nuevo", "/proveedor/index", "/proveedor/nuevo",
+                "/empleado/index", "/empleado/nuevo", "/compra/index", "/compra/nuevo"
+        }) {
+            mvc.perform(get(path).session(session))
+                    .andExpect(status().isOk());
+        }
     }
 }

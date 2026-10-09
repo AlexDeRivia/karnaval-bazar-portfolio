@@ -2,6 +2,7 @@ package com.karnaval.configuracion;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -32,6 +33,7 @@ public class SecurityConfig {
         return http
                 .csrf(csrf -> csrf.ignoringRequestMatchers("/stripe/webhook"))
                 .authorizeHttpRequests(request -> request
+                        .requestMatchers(HttpMethod.GET, "/gestion").permitAll()
                         .requestMatchers("/", "/index", "/shoopingCar/openCar",
                                 "/message-responses/**", "/css/**", "/js/**", "/img/**",
                                 "/favicon.ico", "/favicon.svg", "/favicon.png", "/api/catalog", "/checkout/**", "/stripe/webhook",

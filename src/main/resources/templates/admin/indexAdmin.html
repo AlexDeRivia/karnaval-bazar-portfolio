@@ -1,14 +1,19 @@
 <!DOCTYPE html>
 <html lang="es">
 <head th:replace="~{_frag/base::site-head}"></head>
-<body>
+<body class="management-app">
     <div class="wrapper">
         <header th:replace="~{_frag/base::site-header}"></header>
         <aside th:replace="~{_frag/navbar::m_navbar}"></aside>
         <main>
-            <h2 class="titulo-principal" id="titulo-principal">Panel de gestión</h2>
-            <p>Bienvenido a Bazar Central. Desde el menú puedes gestionar el catálogo, los pedidos online, los clientes, los proveedores, los empleados y las compras.</p>
-            <a class="btn btn-primary" th:href="@{/admin/pedidos}">Ver pedidos online</a>
+            <p class="preview-eyebrow">OPERACIÓN COMERCIAL</p>
+            <h1 class="titulo-principal">Panel de gestión</h1>
+            <p>Organiza el catálogo, consulta los pedidos online y administra las relaciones comerciales desde un mismo lugar.</p>
+            <div class="management-shortcuts">
+                <a th:href="@{/producto/index}"><span>01 / CATÁLOGO</span><strong>Productos</strong><small>Precios, categorías y existencias</small><i class="bi bi-arrow-up-right" aria-hidden="true"></i></a>
+                <a th:href="@{/admin/pedidos}"><span>02 / VENTAS</span><strong>Pedidos online</strong><small>Estado, detalle y confirmación</small><i class="bi bi-arrow-up-right" aria-hidden="true"></i></a>
+                <a th:href="@{/compra/index}"><span>03 / OPERACIÓN</span><strong>Compras</strong><small>Proveedores, empleados y productos</small><i class="bi bi-arrow-up-right" aria-hidden="true"></i></a>
+            </div>
         </main>
     </div>
     <div th:replace="~{_frag/base::site-scripts}"></div>

@@ -19,6 +19,7 @@
         <nav class="store-nav" aria-label="Navegación principal">
             <a class="nav-home" th:href="@{/}">Inicio</a>
             <a class="nav-catalog" th:href="@{/#catalogo}">Catálogo</a>
+            <a class="nav-management" th:href="@{/gestion}">Gestión</a>
             <a class="nav-cart" th:href="@{/shoopingCar/openCar}" aria-label="Ver carrito">
                 <i class="bi bi-bag" aria-hidden="true"></i><span>Carrito</span>
                 <span id="numerito" class="cart-count" aria-label="0 productos">0</span>
@@ -37,4 +38,5 @@
 <footer class="store-footer" th:fragment="footer">
     <span>© 2024 Bazar Central</span>
     <span>Hallazgos para todos los días.</span>
+    <a th:href="@{/gestion}">Área de gestión</a>
 </footer>

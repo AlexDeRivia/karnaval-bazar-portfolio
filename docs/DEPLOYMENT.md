@@ -6,6 +6,8 @@ Los pedidos se guardan antes de enviar al comprador a Stripe y se confirman medi
 
 El archivo `render.yaml` prepara un servicio web Docker en Render con `SPRING_PROFILES_ACTIVE=prod` y `APP_SEED_CATALOG=true`. El catálogo inicial se carga solo si todavía no hay productos. Las credenciales se introducen como secretos; Render proporciona la URL pública mediante `RENDER_EXTERNAL_URL`. El checkout permanece desactivado durante el primer despliegue y se activa con `CHECKOUT_MODE=stripe-test` al registrar el webhook.
 
+La ruta pública `/gestion` presenta una vista de consulta con contenido ilustrativo integrado en la plantilla. No consulta Neon, no muestra pedidos o contactos reales y no ofrece formularios de escritura. El panel real conserva su acceso exclusivo mediante `/admin/login` y las variables `ADMIN_USERNAME` y `ADMIN_PASSWORD`.
+
 ### Opción sin cargos: Render Free + Neon Free
 
 Para conservar pedidos sin la caducidad de 30 días de Render Postgres Free, usa una base PostgreSQL de Neon Free y el servicio web Render Free. Neon mantiene los datos al suspender el cómputo por inactividad. Ambos planes tienen cuotas y pueden limitar o suspender el servicio al agotarlas; no ofrecen disponibilidad continua. El servicio web de Render se duerme tras 15 minutos sin tráfico y su siguiente visita puede tardar alrededor de un minuto. Esto también puede retrasar la recepción del webhook de Stripe; comprueba la entrega y el estado del pedido después de cada prueba.

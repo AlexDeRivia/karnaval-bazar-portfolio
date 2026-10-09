@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{_frag/base::site-head}"></head>
+<body class="management-app management-preview">
+    <div class="wrapper">
+        <header th:replace="~{_frag/base::site-header}"></header>
+        <aside class="management-sidebar">
+            <div>
+                <div class="sidebar-top">
+                    <a class="management-brand" th:href="@{/}" aria-label="Bazar Central, ir a la tienda">Bazar <em>Central</em><b>.</b></a>
+                    <button class="close-menu" id="close-menu" type="button" aria-label="Cerrar menú"><i class="bi bi-x-lg" aria-hidden="true"></i></button>
+                </div>
+                <p class="sidebar-caption">VISTA DE CONSULTA</p>
+                <nav class="management-nav" aria-label="Secciones de la vista de gestión">
+                    <a href="#resumen"><i class="bi bi-grid-1x2" aria-hidden="true"></i> Resumen</a>
+                    <a href="#productos"><i class="bi bi-box-seam" aria-hidden="true"></i> Productos</a>
+                    <a href="#pedidos"><i class="bi bi-receipt" aria-hidden="true"></i> Pedidos online</a>
+                    <a href="#compras"><i class="bi bi-bag-check" aria-hidden="true"></i> Compras</a>
+                    <a href="#relaciones"><i class="bi bi-people" aria-hidden="true"></i> Relaciones</a>
+                </nav>
+            </div>
+            <div class="sidebar-bottom">
+                <a th:href="@{/}"><i class="bi bi-arrow-up-left" aria-hidden="true"></i> Volver a la tienda</a>
+                <a th:href="@{/admin/login}"><i class="bi bi-lock" aria-hidden="true"></i> Acceso administrativo</a>
+                <small>© 2024 Bazar Central</small>
+            </div>
+        </aside>
+
+        <main id="resumen">
+            <div class="preview-main">
+                <p class="preview-eyebrow">OPERACIÓN COMERCIAL</p>
+                <h1>Todo el bazar,<br><em>en perspectiva.</em></h1>
+                <p class="preview-lead">Una mirada a las herramientas para organizar el catálogo, seguir pedidos y registrar compras. La tienda y la gestión comparten el mismo sistema.</p>
+                <p class="preview-note"><i class="bi bi-shield-check" aria-hidden="true"></i><span>Vista de consulta con datos ilustrativos. Las modificaciones y los registros internos requieren acceso autorizado.</span></p>
+
+                <div class="preview-strip" aria-label="Áreas del sistema">
+                    <div class="preview-stat"><span>01 / Catálogo</span><strong>Productos</strong><small>Precios, categorías y existencias</small></div>
+                    <div class="preview-stat"><span>02 / Ventas</span><strong>Pedidos</strong><small>Seguimiento del pago y su estado</small></div>
+                    <div class="preview-stat"><span>03 / Operación</span><strong>Compras</strong><small>Proveedores, equipo y registros</small></div>
+                </div>
+
+                <section class="preview-section" id="productos" aria-labelledby="preview-products-title">
+                    <div class="preview-section-head">
+                        <div><p class="preview-eyebrow">CATÁLOGO E INVENTARIO</p><h2 id="preview-products-title">Productos</h2></div>
+                        <p>La gestión interna reúne los datos que alimentan la tienda y sus existencias.</p>
+                    </div>
+                    <div class="preview-table-wrap">
+                        <table class="table preview-table">
+                            <thead><tr><th>Artículo</th><th>Categoría</th><th>Precio</th><th>Existencia</th><th>Estado</th></tr></thead>
+                            <tbody>
+                                <tr><td><span class="preview-item"><img th:src="@{/img/tecnologia/07.jpg}" alt="" loading="lazy">Monitor 4K</span></td><td>Tecnología</td><td>S/ 3,000.00</td><td>20 unidades</td><td><span class="preview-status">Disponible</span></td></tr>
+                                <tr><td><span class="preview-item"><img th:src="@{/img/tecnologia/06.jpg}" alt="" loading="lazy">Tablet</span></td><td>Tecnología</td><td>S/ 2,000.00</td><td>20 unidades</td><td><span class="preview-status">Disponible</span></td></tr>
+                                <tr><td><span class="preview-item"><img th:src="@{/img/accesorios_mujer/03.jpg}" alt="" loading="lazy">Collar de Perlas</span></td><td>Accesorios</td><td>S/ 500.00</td><td>20 unidades</td><td><span class="preview-status">Disponible</span></td></tr>
+                                <tr><td><span class="preview-item"><img th:src="@{/img/tecnologia/01.jpg}" alt="" loading="lazy">Auriculares Bluetooth</span></td><td>Tecnología</td><td>S/ 500.00</td><td>20 unidades</td><td><span class="preview-status">Disponible</span></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <section class="preview-section" id="pedidos" aria-labelledby="preview-orders-title">
+                    <div class="preview-section-head">
+                        <div><p class="preview-eyebrow">VENTAS EN LÍNEA</p><h2 id="preview-orders-title">Pedidos</h2></div>
+                        <p>El pago se confirma con Stripe; el stock reservado se ajusta según el resultado.</p>
+                    </div>
+                    <div class="preview-table-wrap">
+                        <table class="table preview-table">
+                            <thead><tr><th>Referencia</th><th>Artículos</th><th>Total</th><th>Estado</th></tr></thead>
+                            <tbody>
+                                <tr><td>BC-001</td><td>Monitor 4K · Tablet × 2</td><td>S/ 7,000.00</td><td><span class="preview-status">Confirmado</span></td></tr>
+                                <tr><td>BC-002</td><td>Auriculares Bluetooth</td><td>S/ 500.00</td><td><span class="preview-status pending">Pendiente</span></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <section class="preview-section" id="compras" aria-labelledby="preview-purchases-title">
+                    <div class="preview-section-head">
+                        <div><p class="preview-eyebrow">ABASTECIMIENTO</p><h2 id="preview-purchases-title">Compras</h2></div>
+                        <p>El área interna relaciona cada compra con un proveedor, un empleado y sus productos.</p>
+                    </div>
+                    <div class="preview-flow">
+                        <article><span class="step">01 / ORIGEN</span><h3>Proveedor</h3><p>Se registra la empresa que suministra los artículos.</p></article>
+                        <article><span class="step">02 / REGISTRO</span><h3>Compra</h3><p>Se documentan la fecha, los productos, cantidades y precios.</p></article>
+                        <article><span class="step">03 / SEGUIMIENTO</span><h3>Detalle</h3><p>La operación queda disponible para consulta y administración.</p></article>
+                    </div>
+                </section>
+
+                <section class="preview-section" id="relaciones" aria-labelledby="preview-relations-title">
+                    <div class="preview-section-head">
+                        <div><p class="preview-eyebrow">REGISTROS INTERNOS</p><h2 id="preview-relations-title">Relaciones</h2></div>
+                        <p>Clientes, proveedores y empleados se gestionan en áreas separadas y protegidas.</p>
+                    </div>
+                    <div class="preview-flow">
+                        <article><span class="step">CLIENTES</span><h3>Contactos</h3><p>Altas, consultas y actualización de datos comerciales.</p></article>
+                        <article><span class="step">PROVEEDORES</span><h3>Abastecimiento</h3><p>Información de las empresas vinculadas a las compras.</p></article>
+                        <article><span class="step">EMPLEADOS</span><h3>Equipo</h3><p>Registro del personal que participa en la operación.</p></article>
+                    </div>
+                </section>
+
+                <div class="preview-close"><h2>Explora ahora el catálogo.</h2><a th:href="@{/}">Ir a la tienda <i class="bi bi-arrow-up-right" aria-hidden="true"></i></a></div>
+            </div>
+        </main>
+    </div>
+    <div th:replace="~{_frag/base::site-scripts}"></div>
+</body>
+</html>

@@ -4,6 +4,8 @@ Sistema web de Bazar Central para consultar el catálogo de productos y gestiona
 
 La tienda pública permite recorrer las categorías, ordenar productos y ajustar el carrito antes de continuar al pago. La página de confirmación muestra el estado del pedido y habilita la descarga del PDF cuando Stripe confirma el pago. El panel administrativo incluye una vista de pedidos online.
 
+La ruta `/gestion` ofrece una vista pública de consulta del área administrativa. Presenta información ilustrativa integrada en la página, sin leer la base de datos ni exponer clientes o pedidos reales. Permite conocer el catálogo, el seguimiento de pedidos y las compras; la creación y edición de registros siguen protegidas por el acceso ADMIN en `/admin/login`.
+
 ## Estado del proyecto
 
 El perfil `demo` carga 50 productos en una base H2 en memoria. El catálogo y el carrito funcionan con esos productos; para iniciar Stripe Checkout se deben configurar las credenciales de prueba. Los datos se restablecen al reiniciar la aplicación. El panel de gestión requiere una cuenta administrativa configurada por variables de entorno.
