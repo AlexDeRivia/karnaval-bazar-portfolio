@@ -1,72 +1,140 @@
-# Bazar Central
+<p align="center">
+  <img src="src/main/resources/static/favicon.svg" alt="Identidad de Bazar Central" width="68" height="68">
+</p>
 
-Sistema web de Bazar Central para consultar el catálogo de productos y gestionar clientes, empleados, proveedores, productos y compras. Está desarrollado con Spring Boot, Thymeleaf, Spring Security y JPA.
+<h1 align="center">Bazar Central</h1>
 
-La tienda pública permite recorrer las categorías, ordenar productos y ajustar el carrito antes de continuar al pago. La página de confirmación muestra el estado del pedido y habilita la descarga del PDF cuando Stripe confirma el pago. El panel administrativo incluye una vista de pedidos online.
+<p align="center">Una tienda en línea conectada con la operación comercial de un bazar.</p>
 
-La ruta `/gestion` ofrece una vista pública de consulta del área administrativa. Presenta información ilustrativa integrada en la página, sin leer la base de datos ni exponer clientes o pedidos reales. Permite conocer el catálogo, el seguimiento de pedidos y las compras; la creación y edición de registros siguen protegidas por el acceso ADMIN en `/admin/login`.
+<p align="center">
+  <a href="https://sistema-comercial-bazar.onrender.com/">Visitar la tienda</a> ·
+  <a href="https://sistema-comercial-bazar.onrender.com/gestion">Explorar la gestión</a> ·
+  <a href="docs/DEPLOYMENT.md">Guía de despliegue</a>
+</p>
 
-## Estado del proyecto
+![Página principal de Bazar Central](docs/images/storefront.jpg)
 
-El perfil `demo` carga 50 productos en una base H2 en memoria. El catálogo y el carrito funcionan con esos productos; para iniciar Stripe Checkout se deben configurar las credenciales de prueba. Los datos se restablecen al reiniciar la aplicación. El panel de gestión requiere una cuenta administrativa configurada por variables de entorno.
+Bazar Central reúne un catálogo navegable, carrito, pedidos y pagos con **Stripe Checkout en modo de prueba**. La misma aplicación incluye herramientas para administrar productos, proveedores, clientes, empleados y compras. Está construida con Java y Spring Boot, con vistas Thymeleaf y persistencia mediante Spring Data JPA.
 
-El perfil `prod` usa PostgreSQL para conservar pedidos. Con `CHECKOUT_MODE=stripe-test`, el servidor reserva stock, crea una sesión de Stripe Checkout con precios calculados desde la base de datos y confirma el pedido mediante un webhook con firma válida. La sesión vence a los 30 minutos; el stock reservado vuelve al catálogo al procesar su expiración o al conciliar el estado con Stripe. Un proceso periódico consulta las sesiones pendientes para recuperar eventos perdidos y libera reservas sin sesión. La página de confirmación permite descargar una factura informativa en PDF una vez confirmado. **No admite claves de modo activo ni emite facturas fiscales.**
+## Recorrido por el sistema
 
-## Ejecución local
+| Área | Qué permite hacer |
+| --- | --- |
+| [Tienda](https://sistema-comercial-bazar.onrender.com/) | Explorar categorías, ordenar productos, consultar disponibilidad y preparar el carrito. |
+| Compra | Abrir Stripe Checkout, seguir el estado del pedido y descargar un comprobante PDF cuando se confirma el pago. |
+| [Vista de gestión](https://sistema-comercial-bazar.onrender.com/gestion) | Conocer las secciones de productos, pedidos y compras sin modificar registros ni consultar datos privados. Sus contenidos son ilustrativos. |
+| Panel administrativo | Gestionar registros comerciales y consultar los pedidos en línea con una cuenta `ADMIN` configurada por el responsable del servicio. |
 
-Requisitos: JDK 21 o superior y acceso a Maven Central en el primer inicio.
+<details>
+<summary>Ver la vista pública de gestión</summary>
+
+![Vista pública de gestión de Bazar Central](docs/images/management.jpg)
+
+</details>
+
+### Del carrito a la confirmación
+
+```mermaid
+flowchart LR
+    A[Catálogo y carrito] --> B[Pedido y reserva de stock]
+    B --> C[Stripe Checkout]
+    C --> D{Webhook firmado}
+    D -->|Pago confirmado| E[Pedido pagado y comprobante PDF]
+    D -->|Sesión expirada o pago fallido| F[Stock liberado]
+```
+
+El servidor calcula los importes a partir de los productos guardados, reserva las unidades antes de crear la sesión de pago y confirma el pedido **mediante el webhook de Stripe**, no por la visita a la página de retorno. Una tarea periódica concilia sesiones pendientes para recuperar eventos no recibidos. El PDF es un comprobante informativo; no es una factura tributaria.
+
+## Tecnologías
+
+| Capa | Herramientas |
+| --- | --- |
+| Interfaz | Thymeleaf, HTML, CSS y JavaScript |
+| Servidor | Java 21, Spring Boot, Spring MVC y Spring Security |
+| Datos | Spring Data JPA, PostgreSQL en el despliegue y H2 en la ejecución local predeterminada |
+| Pagos y documentos | Stripe Checkout, webhooks y Apache PDFBox |
+| Construcción y despliegue | Maven Wrapper, Docker y Render |
+
+El código sigue una estructura de **controladores, servicios, repositorios y entidades**. Las rutas administrativas están protegidas con Spring Security; `/gestion` es una vista pública de consulta separada del panel real.
+
+## Ejecutar en local
+
+Necesitas **JDK 21 o superior**. El repositorio incluye Maven Wrapper, por lo que no hace falta instalar Maven por separado. La primera ejecución necesita acceso a Maven Central para descargar dependencias.
+
+<details open>
+<summary>Windows / PowerShell</summary>
+
+```powershell
+.\mvnw.cmd clean test
+.\mvnw.cmd spring-boot:run
+```
+
+</details>
+
+<details>
+<summary>macOS / Linux</summary>
 
 ```bash
 ./mvnw clean test
 ./mvnw spring-boot:run
 ```
 
-En Windows, usa `mvnw.cmd`. Abre `http://localhost:8080/`. Para habilitar el panel, define `ADMIN_USERNAME` y `ADMIN_PASSWORD` (al menos 12 caracteres) antes de iniciar la app. No hay contraseña predeterminada. El login está en `/admin/login`; los pedidos se consultan en `/admin/pedidos`. Al iniciar, cualquier otra cuenta `ADMIN` guardada en la base queda desactivada. Si se omiten ambas variables, se desactivan todas las cuentas administrativas.
+</details>
 
-## Configuración
+Abre [http://localhost:8080](http://localhost:8080). Por defecto se activa el perfil `demo`: carga el catálogo en **H2 en memoria** y restablece los datos al reiniciar. El catálogo y el carrito funcionan sin servicios externos; para abrir Stripe Checkout, configura las variables de la sección siguiente.
 
-| Variable | Uso |
-| --- | --- |
-| `SPRING_PROFILES_ACTIVE` | `demo` por defecto; `prod` para PostgreSQL. |
-| `PORT` | Puerto HTTP; `8080` por defecto. |
-| `ADMIN_USERNAME`, `ADMIN_PASSWORD` | Crea o actualiza la única cuenta administrativa activa; la contraseña debe tener al menos 12 caracteres. |
-| `APP_SEED_CATALOG` | En `prod`, carga el catálogo inicial solo si la tabla de productos está vacía. |
-| `JDBC_DATABASE_URL`, `DB_USERNAME`, `DB_PASSWORD` | Requeridas en el perfil `prod`. |
-| `CHECKOUT_MODE` | `disabled` por defecto o `stripe-test`. |
-| `STRIPE_SECRET_KEY` | Clave `sk_test_` de tu cuenta Stripe; solo en el servidor. |
-| `STRIPE_PUBLISHABLE_KEY` | Clave `pk_test_` de la misma cuenta. Checkout alojado no la expone al navegador, pero se valida para impedir una configuración de modo mixto. |
-| `STRIPE_WEBHOOK_SECRET` | Secreto `whsec_` del endpoint de webhook o de Stripe CLI. |
-| `PUBLIC_BASE_URL` | URL base HTTPS del sitio; para pruebas locales se admite `http://localhost:8080`. En Render se usa `RENDER_EXTERNAL_URL` automáticamente si no se define. |
+### Probar el pago con Stripe
 
-No guardes credenciales en Git. Configura las claves de servicios externos solo mediante variables de entorno.
+1. Obtén las claves `sk_test_` y `pk_test_` de tu cuenta en [Stripe Dashboard](https://dashboard.stripe.com/test/apikeys). El código solo acepta claves de prueba.
+2. Instala [Stripe CLI](https://docs.stripe.com/stripe-cli), ejecuta `stripe login` y, en otra terminal, inicia el reenvío de eventos:
 
-## Probar una compra con Stripe
+   ```bash
+   stripe listen --forward-to localhost:8080/stripe/webhook
+   ```
 
-1. Obtén **tus propias** claves de prueba `sk_test_` y `pk_test_` en [Stripe Dashboard](https://dashboard.stripe.com/test/apikeys). No utilices la clave del historial del repositorio anterior.
-2. Instala [Stripe CLI](https://docs.stripe.com/stripe-cli) e inicia sesión con `stripe login`. Ejecuta `stripe listen --forward-to localhost:8080/stripe/webhook` y copia el secreto `whsec_` que muestra la CLI. Mantén la CLI abierta durante la prueba.
-3. Configura `CHECKOUT_MODE=stripe-test`, `STRIPE_SECRET_KEY`, `STRIPE_PUBLISHABLE_KEY`, `STRIPE_WEBHOOK_SECRET` y `PUBLIC_BASE_URL=http://localhost:8080` como variables de entorno. Por ejemplo, en PowerShell:
+3. Copia el secreto `whsec_` que muestra la CLI. En la terminal donde iniciarás la aplicación, define las variables y arráncala. Por ejemplo, en PowerShell:
 
    ```powershell
    $env:CHECKOUT_MODE = 'stripe-test'
    $env:STRIPE_SECRET_KEY = '<tu sk_test_...>'
    $env:STRIPE_PUBLISHABLE_KEY = '<tu pk_test_...>'
-   $env:STRIPE_WEBHOOK_SECRET = '<el whsec_... mostrado por Stripe CLI>'
+   $env:STRIPE_WEBHOOK_SECRET = '<el whsec_... de Stripe CLI>'
    $env:PUBLIC_BASE_URL = 'http://localhost:8080'
    .\mvnw.cmd spring-boot:run
    ```
 
-4. Abre `http://localhost:8080/`, añade un producto, entra al carrito y selecciona **Continuar**. Usa una fecha futura, cualquier CVC de tres dígitos y una de estas [tarjetas de prueba de Stripe](https://docs.stripe.com/testing):
+4. Añade productos al carrito y continúa al pago. Usa una fecha futura, cualquier CVC de tres dígitos y una [tarjeta de prueba de Stripe](https://docs.stripe.com/testing):
 
-   | Tarjeta | Resultado esperado |
+   | Número de tarjeta | Resultado |
    | --- | --- |
    | `4242 4242 4242 4242` | Pago aprobado; el webhook confirma el pedido y habilita el PDF. |
-   | `4000 0000 0000 0002` | Pago rechazado; no hay confirmación ni PDF. |
-   | `4000 0000 0000 3220` | Solicita autenticación 3D Secure antes de completar el pago. |
+   | `4000 0000 0000 0002` | Pago rechazado; no se genera comprobante. |
+   | `4000 0000 0000 3220` | Solicita autenticación 3D Secure. |
 
-La URL de retorno solo muestra el estado; no confirma el pedido por sí sola. Si el webhook aún no llegó, la página espera la confirmación. El PDF se entrega solo a quien posee el ID del pedido y el ID de sesión de Stripe; no compartas la URL de retorno. Es un comprobante informativo sin validez tributaria. Para un sitio público usa PostgreSQL persistente y registra en Stripe el webhook `https://TU_DOMINIO/stripe/webhook` con `checkout.session.completed`, `checkout.session.expired` y los eventos de pago asíncrono. El secreto del endpoint público es distinto del secreto generado por Stripe CLI.
+No uses datos bancarios reales. La página de retorno puede mostrar el pedido como pendiente durante unos instantes mientras llega el webhook. El enlace de retorno contiene identificadores del pedido y la sesión; evita compartirlo.
+
+## Configuración
+
+| Variable | Función |
+| --- | --- |
+| `SPRING_PROFILES_ACTIVE` | `demo` por defecto; `prod` para PostgreSQL. |
+| `PORT` | Puerto HTTP; `8080` por defecto. |
+| `JDBC_DATABASE_URL`, `DB_USERNAME`, `DB_PASSWORD` | Conexión PostgreSQL obligatoria con `prod`. |
+| `APP_SEED_CATALOG` | Con `true` en `prod`, carga el catálogo inicial únicamente si no hay productos. |
+| `CHECKOUT_MODE` | `disabled` por defecto; `stripe-test` para habilitar Checkout. |
+| `STRIPE_SECRET_KEY`, `STRIPE_PUBLISHABLE_KEY` | Claves `sk_test_` y `pk_test_` de la misma cuenta Stripe. |
+| `STRIPE_WEBHOOK_SECRET` | Secreto `whsec_` del endpoint de webhook. |
+| `PUBLIC_BASE_URL` | Origen público HTTPS sin ruta; en local se admite `http://localhost:8080`. Render proporciona `RENDER_EXTERNAL_URL` si se omite. |
+| `ADMIN_USERNAME`, `ADMIN_PASSWORD` | Crea o actualiza la única cuenta administrativa activa. La contraseña debe tener al menos 12 caracteres. |
+
+No hay usuario ni contraseña administrativos predeterminados. Si faltan ambas variables `ADMIN_*`, las cuentas administrativas quedan desactivadas. El acceso está en `/admin/login`; el listado de pedidos, en `/admin/pedidos`. Conserva contraseñas, claves de Stripe y credenciales de PostgreSQL fuera del repositorio.
 
 ## Despliegue
 
-El `Dockerfile` construye un ejecutable con Java 21 y ejecuta la aplicación como usuario sin privilegios. `render.yaml` define un servicio web con PostgreSQL externo y catálogo inicial. Tras crear el servicio, registra su URL de webhook en Stripe, añade `STRIPE_WEBHOOK_SECRET` en Render y activa `CHECKOUT_MODE=stripe-test` para habilitar el botón de compra. El checkout y el login tienen límites de solicitudes por IP dentro del proceso; configura también límites en el borde si usas varias instancias.
+El [`Dockerfile`](Dockerfile) construye y ejecuta la aplicación con Java 21. [`render.yaml`](render.yaml) define el servicio web con el perfil `prod`; la base PostgreSQL y los secretos se configuran en el alojamiento. Para habilitar los pagos en el sitio público, registra en Stripe el endpoint `https://TU_DOMINIO/stripe/webhook` con los eventos `checkout.session.completed`, `checkout.session.expired`, `checkout.session.async_payment_succeeded` y `checkout.session.async_payment_failed`.
 
-El plan gratuito de Render puede suspender el servicio tras inactividad y tardar en volver a iniciarlo. Consulta [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) para los pasos de configuración y las limitaciones del alojamiento.
+Consulta la [guía de despliegue](docs/DEPLOYMENT.md) para configurar Render, PostgreSQL y Stripe paso a paso. En producción se necesita una base persistente para conservar pedidos y asociarlos con los eventos del webhook. El proyecto mantiene Stripe exclusivamente en modo de prueba; los pagos no realizan cargos reales. El perfil `prod` utiliza actualmente `ddl-auto=update`: antes de evolucionar el esquema con datos importantes, conviene incorporar migraciones versionadas y copias de seguridad.
+
+---
+
+Las imágenes del catálogo forman parte de la interfaz actual. Antes de reutilizarlas en otro proyecto, verifica sus derechos de uso.
