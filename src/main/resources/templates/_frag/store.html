@@ -38,5 +38,8 @@
 <footer class="store-footer" th:fragment="footer">
     <span>© 2024 Bazar Central</span>
     <span>Hallazgos para todos los días.</span>
-    <a th:href="@{/gestion}">Área de gestión</a>
+    <nav class="store-footer-links" aria-label="Enlaces del pie de página">
+        <a th:href="@{/gestion}">Área de gestión</a>
+        <a class="store-github-link" href="https://github.com/AlexDeRivia/sistema-comercial-bazar" target="_blank" rel="noopener noreferrer" aria-label="Ver el código completo en GitHub (abre en una pestaña nueva)"><i class="bi bi-github" aria-hidden="true"></i><span>Código en GitHub</span></a>
+    </nav>
 </footer>
